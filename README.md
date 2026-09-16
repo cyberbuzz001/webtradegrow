@@ -123,7 +123,39 @@ customer can confirm it from an independent source.
 
 ## Deploying
 
-`dist/` is plain static files — deploy to any CDN or static host.
+**Live preview:** <https://cyberbuzz001.github.io/webtradegrow/>
+
+Every push to `main` triggers [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml), which
+builds and publishes to GitHub Pages. Pull requests run the build and link check **without**
+deploying.
+
+**The build is the deploy gate.** `node build/build.js` exits 1 on any prohibited marketing claim,
+so such copy cannot reach the live site even if it gets merged.
+
+### Base path
+
+GitHub Pages serves project repos from a subpath (`/webtradegrow/`), but pages are authored with
+root-absolute links (`/verify/`, `/assets/...`) — correct for the production domain. The builder
+takes two environment variables and rewrites links at build time, so **one source tree deploys to
+either a subpath or a root domain with no page edits**:
+
+```bash
+# Root domain (default) — tradegrow.in
+node build/build.js
+
+# Subpath — GitHub Pages
+BASE_PATH=webtradegrow SITE_URL=https://cyberbuzz001.github.io node build/build.js
+```
+
+`BASE_PATH` accepts `webtradegrow` or `/webtradegrow`. Prefer the bare form on Windows: Git Bash
+rewrites a leading `/` into a drive path. Run `build/check-links.js` with the **same** `BASE_PATH`
+as the build — it resolves and validates against that base, and separately flags any link the
+builder failed to rewrite.
+
+### Going live on the real domain
+
+When `tradegrow.in` is ready, either point a CNAME at Pages and drop the two env vars from the
+workflow, or upload `dist/` to Hostinger as plain static files. Nothing else changes.
 
 Required security headers are in
 [`02-architecture-and-deployment.md`](docs/02-architecture-and-deployment.md) §6. The CSP is strict
