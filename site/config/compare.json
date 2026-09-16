@@ -1,0 +1,110 @@
+{
+  "_README": [
+    "BROKER COMPARISON CONFIG.",
+    "RULE 1: Never publish a competitor's pricing from memory. Every competitor cell must be sourced from that broker's own published tariff page on a stated date.",
+    "RULE 2: Fill 'value' only after someone has opened the 'source' URL and copied the figure. Set 'checkedOn' to that date.",
+    "RULE 3: Null values render as 'Verify on broker site' with a link. That is an acceptable, honest state to ship in.",
+    "RULE 4: No 'winner', no 'best broker', no highlighting Trade Grow's column. The table is a research aid, not an ad."
+  ],
+
+  "disclaimer": "Brokerage and charges change frequently. Always verify the latest pricing directly with the respective broker before deciding. Trade Grow does not control and is not responsible for information published by other brokers. Competitor names and trademarks belong to their respective owners and are used here only for factual comparison.",
+
+  "lastReviewedOn": null,
+  "reviewedBy": null,
+
+  "brokers": [
+    { "key": "tradegrow", "name": "Trade Grow", "isSelf": true,  "source": "/pricing/", "checkedOn": null },
+    { "key": "broker_a",  "name": "Zerodha",    "isSelf": false, "source": "https://zerodha.com/charges", "checkedOn": null },
+    { "key": "broker_b",  "name": "Groww",      "isSelf": false, "source": "https://groww.in/charges", "checkedOn": null },
+    { "key": "broker_c",  "name": "Angel One",  "isSelf": false, "source": "https://www.angelone.in/charges", "checkedOn": null },
+    { "key": "broker_d",  "name": "Upstox",     "isSelf": false, "source": "https://upstox.com/brokerage-charges/", "checkedOn": null }
+  ],
+
+  "criteria": [
+    {
+      "key": "account_opening",
+      "label": "Account Opening Charge",
+      "note": "One-time charge to open the trading and demat account.",
+      "values": { "tradegrow": null, "broker_a": null, "broker_b": null, "broker_c": null, "broker_d": null }
+    },
+    {
+      "key": "amc",
+      "label": "Demat AMC",
+      "note": "Annual maintenance charge on the demat account.",
+      "values": { "tradegrow": null, "broker_a": null, "broker_b": null, "broker_c": null, "broker_d": null }
+    },
+    {
+      "key": "brokerage_delivery",
+      "label": "Brokerage: Equity Delivery",
+      "values": { "tradegrow": null, "broker_a": null, "broker_b": null, "broker_c": null, "broker_d": null }
+    },
+    {
+      "key": "brokerage_intraday",
+      "label": "Brokerage: Equity Intraday",
+      "values": { "tradegrow": null, "broker_a": null, "broker_b": null, "broker_c": null, "broker_d": null }
+    },
+    {
+      "key": "brokerage_fo",
+      "label": "Brokerage: Futures &amp; Options",
+      "values": { "tradegrow": null, "broker_a": null, "broker_b": null, "broker_c": null, "broker_d": null }
+    },
+    {
+      "key": "dp_charges",
+      "label": "DP Charges (on delivery sell)",
+      "note": "Charged per scrip per day by the depository and the DP.",
+      "values": { "tradegrow": null, "broker_a": null, "broker_b": null, "broker_c": null, "broker_d": null }
+    },
+    {
+      "key": "statutory",
+      "label": "Statutory Charges (STT, GST, Stamp Duty, Exchange, SEBI)",
+      "note": "Identical across all brokers. These are set by the Government, Exchanges and SEBI, not by the broker.",
+      "sameForAll": "Same for every broker",
+      "values": { "tradegrow": null, "broker_a": null, "broker_b": null, "broker_c": null, "broker_d": null }
+    },
+    {
+      "key": "platforms",
+      "label": "Trading Platforms",
+      "note": "Mobile app, web terminal, desktop terminal.",
+      "values": { "tradegrow": null, "broker_a": null, "broker_b": null, "broker_c": null, "broker_d": null }
+    },
+    {
+      "key": "products",
+      "label": "Product Availability",
+      "note": "Equity, F&amp;O, Currency, Commodity, Mutual Funds, IPO, Bonds.",
+      "values": { "tradegrow": null, "broker_a": null, "broker_b": null, "broker_c": null, "broker_d": null }
+    },
+    {
+      "key": "kyc",
+      "label": "KYC Process",
+      "values": { "tradegrow": null, "broker_a": null, "broker_b": null, "broker_c": null, "broker_d": null }
+    },
+    {
+      "key": "support",
+      "label": "Customer Support Channels",
+      "values": { "tradegrow": null, "broker_a": null, "broker_b": null, "broker_c": null, "broker_d": null }
+    },
+    {
+      "key": "research",
+      "label": "Research / Advisory",
+      "values": { "tradegrow": null, "broker_a": null, "broker_b": null, "broker_c": null, "broker_d": null }
+    },
+    {
+      "key": "api",
+      "label": "API Access",
+      "values": { "tradegrow": null, "broker_a": null, "broker_b": null, "broker_c": null, "broker_d": null }
+    },
+    {
+      "key": "other",
+      "label": "Other Charges (call &amp; trade, auto square-off, payment gateway)",
+      "values": { "tradegrow": null, "broker_a": null, "broker_b": null, "broker_c": null, "broker_d": null }
+    }
+  ],
+
+  "howToCompare": [
+    "Compare total cost per trade, not just brokerage. A nil-brokerage plan still carries statutory charges.",
+    "Check the charges that match how you actually trade. Delivery investors care about DP charges and AMC; intraday traders care about per-order brokerage.",
+    "Read the conditions attached to any promotional pricing: which segments, for how long, and what the rate becomes afterwards.",
+    "Check platform stability and support responsiveness, not only price. The cheapest platform is expensive if you cannot exit a position.",
+    "Verify every broker's SEBI registration and exchange membership independently before opening an account with any of them, including us."
+  ]
+}
