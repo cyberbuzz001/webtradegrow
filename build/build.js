@@ -38,24 +38,11 @@ const cfg = {
 const PENDING = cfg.site.compliance.pendingLabel;
 
 /**
- * Deployment targets differ in where the site is rooted:
- *   - a real domain (tradegrow.in)          → BASE_PATH = ''
- *   - a GitHub Pages project site           → BASE_PATH = '/webtradegrow'
- * Pages are authored with root-absolute links (/verify/, /assets/...), which is correct
- * for the production domain. When BASE_PATH is set we rewrite those at build time so the
- * same source deploys to a subpath without touching a single page file.
+ * Pages are authored with root-absolute links (/verify/, /assets/...), which is correct for
+ * the production domain. When BASE_PATH is set we rewrite those at build time so the same
+ * source deploys to a subpath (GitHub Pages) without touching a single page file.
  */
-// Accepts "webtradegrow" or "/webtradegrow". The leading-slash-free form is preferred on
-// Windows, where Git Bash's MSYS path conversion rewrites a leading "/" into a drive path.
-const BASE = (function () {
-  let b = (process.env.BASE_PATH || '').trim().replace(/\/+$/, '');
-  if (!b) return '';
-  if (/^[A-Za-z]:[\\/]/.test(b)) {
-    // MSYS mangled it (e.g. C:/Program Files/Git/webtradegrow) — keep the last segment.
-    b = b.split(/[\\/]/).pop();
-  }
-  return b.startsWith('/') ? b : '/' + b;
-})();
+const { BASE } = require('./base.js');
 const SITE_URL = (process.env.SITE_URL || cfg.site.brand.domain || '').replace(/\/+$/, '');
 
 /** Rewrite root-absolute href/src to sit under BASE. Leaves //host and http(s):// alone. */
