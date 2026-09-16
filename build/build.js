@@ -37,6 +37,33 @@ const cfg = {
 
 const PENDING = cfg.site.compliance.pendingLabel;
 
+/**
+ * Deployment targets differ in where the site is rooted:
+ *   - a real domain (tradegrow.in)          → BASE_PATH = ''
+ *   - a GitHub Pages project site           → BASE_PATH = '/webtradegrow'
+ * Pages are authored with root-absolute links (/verify/, /assets/...), which is correct
+ * for the production domain. When BASE_PATH is set we rewrite those at build time so the
+ * same source deploys to a subpath without touching a single page file.
+ */
+// Accepts "webtradegrow" or "/webtradegrow". The leading-slash-free form is preferred on
+// Windows, where Git Bash's MSYS path conversion rewrites a leading "/" into a drive path.
+const BASE = (function () {
+  let b = (process.env.BASE_PATH || '').trim().replace(/\/+$/, '');
+  if (!b) return '';
+  if (/^[A-Za-z]:[\\/]/.test(b)) {
+    // MSYS mangled it (e.g. C:/Program Files/Git/webtradegrow) — keep the last segment.
+    b = b.split(/[\\/]/).pop();
+  }
+  return b.startsWith('/') ? b : '/' + b;
+})();
+const SITE_URL = (process.env.SITE_URL || cfg.site.brand.domain || '').replace(/\/+$/, '');
+
+/** Rewrite root-absolute href/src to sit under BASE. Leaves //host and http(s):// alone. */
+function applyBase(html) {
+  if (!BASE) return html;
+  return html.replace(/\b(href|src)="\/(?!\/)/g, `$1="${BASE}/`);
+}
+
 /** Resolve a dotted path against the merged config namespace. */
 function get(obj, dotted) {
   return dotted.split('.').reduce((o, k) => (o === null || o === undefined ? undefined : o[k]), obj);
@@ -191,16 +218,26 @@ function build() {
 
   for (const page of pages) {
     const content = render(page.body, page);
-    const html = render(layout, { ...page, canonical: cfg.site.brand.domain + page.route }).replace(
-      '{{content}}',
-      content
+    const html = applyBase(
+      render(layout, {
+        ...page,
+        canonical: SITE_URL + BASE + page.route,
+        siteUrl: SITE_URL + BASE,
+        base: BASE,
+      }).replace('{{content}}', content)
     );
 
     lint(html, page.route, problems);
 
-    const outDir = path.join(DIST, page.route);
-    fs.mkdirSync(outDir, { recursive: true });
-    fs.writeFileSync(path.join(outDir, 'index.html'), html);
+    if (page.route === '/404/') {
+      // Static hosts (GitHub Pages, Netlify, most CDNs) look for /404.html specifically,
+      // not /404/index.html.
+      fs.writeFileSync(path.join(DIST, '404.html'), html);
+    } else {
+      const outDir = path.join(DIST, page.route);
+      fs.mkdirSync(outDir, { recursive: true });
+      fs.writeFileSync(path.join(outDir, 'index.html'), html);
+    }
   }
 
   copyDir(path.join(SITE, 'assets'), path.join(DIST, 'assets'));
@@ -215,7 +252,7 @@ function build() {
   // sitemap + robots
   const urls = pages
     .filter((p) => p.noindex !== true)
-    .map((p) => `  <url><loc>${cfg.site.brand.domain}${p.route}</loc></url>`)
+    .map((p) => `  <url><loc>${SITE_URL}${BASE}${p.route}</loc></url>`)
     .join('\n');
   fs.writeFileSync(
     path.join(DIST, 'sitemap.xml'),
@@ -223,7 +260,7 @@ function build() {
   );
   fs.writeFileSync(
     path.join(DIST, 'robots.txt'),
-    `User-agent: *\nAllow: /\nSitemap: ${cfg.site.brand.domain}/sitemap.xml\n`
+    `User-agent: *\nAllow: /\nSitemap: ${SITE_URL}${BASE}/sitemap.xml\n`
   );
 
   // Report

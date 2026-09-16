@@ -25,9 +25,15 @@
 
   /* -------------------------------------------------- current page marker */
 
-  var here = location.pathname.replace(/\/+$/, '/') || '/';
+  // Strip the deployment base path (set by the builder) so route matching works the same
+  // whether the site is served from a domain root or a GitHub Pages subpath.
+  var BASE = window.TG_BASE || '';
+  var here = location.pathname;
+  if (BASE && here.indexOf(BASE) === 0) here = here.slice(BASE.length) || '/';
+  here = here.replace(/\/+$/, '/') || '/';
   document.querySelectorAll('.nav > a').forEach(function (a) {
-    var href = a.getAttribute('href');
+    var href = a.getAttribute('href') || '';
+    if (BASE && href.indexOf(BASE) === 0) href = href.slice(BASE.length) || '/';
     if (href === here || (href !== '/' && here.indexOf(href) === 0)) {
       a.setAttribute('aria-current', 'page');
     }

@@ -199,7 +199,7 @@
     t = setTimeout(update, 180);
   }
 
-  fetch('/assets/config/charges.json')
+  fetch((window.TG_BASE || '') + '/assets/config/charges.json')
     .then(function (r) { return r.json(); })
     .then(function (data) {
       CFG = data;
