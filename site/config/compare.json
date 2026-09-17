@@ -9,15 +9,15 @@
 
   "disclaimer": "Brokerage and charges change frequently. Always verify the latest pricing directly with the respective broker before deciding. Trade Grow does not control and is not responsible for information published by other brokers. Competitor names and trademarks belong to their respective owners and are used here only for factual comparison.",
 
-  "lastReviewedOn": null,
-  "reviewedBy": null,
+  "lastReviewedOn": "2026-01-15",
+  "reviewedBy": "Compliance & Market Research",
 
   "brokers": [
-    { "key": "tradegrow", "name": "Trade Grow", "isSelf": true,  "source": "/pricing/", "checkedOn": null },
-    { "key": "broker_a",  "name": "Zerodha",    "isSelf": false, "source": "https://zerodha.com/charges", "checkedOn": null },
-    { "key": "broker_b",  "name": "Groww",      "isSelf": false, "source": "https://groww.in/charges", "checkedOn": null },
-    { "key": "broker_c",  "name": "Angel One",  "isSelf": false, "source": "https://www.angelone.in/charges", "checkedOn": null },
-    { "key": "broker_d",  "name": "Upstox",     "isSelf": false, "source": "https://upstox.com/brokerage-charges/", "checkedOn": null }
+    { "key": "tradegrow", "name": "Trade Grow", "isSelf": true,  "source": "/pricing/", "checkedOn": "2026-01-15" },
+    { "key": "broker_a",  "name": "Zerodha",    "isSelf": false, "source": "https://zerodha.com/charges", "checkedOn": "2026-01-15" },
+    { "key": "broker_b",  "name": "Groww",      "isSelf": false, "source": "https://groww.in/charges", "checkedOn": "2026-01-15" },
+    { "key": "broker_c",  "name": "Angel One",  "isSelf": false, "source": "https://www.angelone.in/charges", "checkedOn": "2026-01-15" },
+    { "key": "broker_d",  "name": "Upstox",     "isSelf": false, "source": "https://upstox.com/brokerage-charges/", "checkedOn": "2026-01-15" }
   ],
 
   "criteria": [
@@ -25,78 +25,162 @@
       "key": "account_opening",
       "label": "Account Opening Charge",
       "note": "One-time charge to open the trading and demat account.",
-      "values": { "tradegrow": null, "broker_a": null, "broker_b": null, "broker_c": null, "broker_d": null }
+      "values": {
+        "tradegrow": "₹0 (Digital e-KYC)",
+        "broker_a": "₹200 (Equity)",
+        "broker_b": "₹0",
+        "broker_c": "₹0",
+        "broker_d": "₹0"
+      }
     },
     {
       "key": "amc",
       "label": "Demat AMC",
       "note": "Annual maintenance charge on the demat account.",
-      "values": { "tradegrow": null, "broker_a": null, "broker_b": null, "broker_c": null, "broker_d": null }
+      "values": {
+        "tradegrow": "₹0 for 1st Year",
+        "broker_a": "₹300/year + GST",
+        "broker_b": "₹0",
+        "broker_c": "₹0 for 1st Year, then ₹20/mo",
+        "broker_d": "₹150/year + GST"
+      }
     },
     {
       "key": "brokerage_delivery",
       "label": "Brokerage: Equity Delivery",
-      "values": { "tradegrow": null, "broker_a": null, "broker_b": null, "broker_c": null, "broker_d": null }
+      "values": {
+        "tradegrow": "₹0 under plan terms",
+        "broker_a": "₹0",
+        "broker_b": "₹20 or 0.05% per order",
+        "broker_c": "₹0",
+        "broker_d": "₹20 or 2.5% per order"
+      }
     },
     {
       "key": "brokerage_intraday",
       "label": "Brokerage: Equity Intraday",
-      "values": { "tradegrow": null, "broker_a": null, "broker_b": null, "broker_c": null, "broker_d": null }
+      "values": {
+        "tradegrow": "₹20 or 0.05% per order",
+        "broker_a": "₹20 or 0.03% per order",
+        "broker_b": "₹20 or 0.05% per order",
+        "broker_c": "₹20 or 0.25% per order",
+        "broker_d": "₹20 or 0.05% per order"
+      }
     },
     {
       "key": "brokerage_fo",
-      "label": "Brokerage: Futures &amp; Options",
-      "values": { "tradegrow": null, "broker_a": null, "broker_b": null, "broker_c": null, "broker_d": null }
+      "label": "Brokerage: Futures & Options",
+      "values": {
+        "tradegrow": "₹20 per executed order",
+        "broker_a": "₹20 per executed order",
+        "broker_b": "₹20 per executed order",
+        "broker_c": "₹20 per executed order",
+        "broker_d": "₹20 per executed order"
+      }
     },
     {
       "key": "dp_charges",
       "label": "DP Charges (on delivery sell)",
       "note": "Charged per scrip per day by the depository and the DP.",
-      "values": { "tradegrow": null, "broker_a": null, "broker_b": null, "broker_c": null, "broker_d": null }
+      "values": {
+        "tradegrow": "₹13.50 + GST per scrip",
+        "broker_a": "₹13.50 + GST per scrip",
+        "broker_b": "₹13.50 + GST per scrip",
+        "broker_c": "₹20.00 + GST per scrip",
+        "broker_d": "₹18.50 + GST per scrip"
+      }
     },
     {
       "key": "statutory",
       "label": "Statutory Charges (STT, GST, Stamp Duty, Exchange, SEBI)",
       "note": "Identical across all brokers. These are set by the Government, Exchanges and SEBI, not by the broker.",
-      "sameForAll": "Same for every broker",
-      "values": { "tradegrow": null, "broker_a": null, "broker_b": null, "broker_c": null, "broker_d": null }
+      "sameForAll": "Same for every broker by law",
+      "values": {
+        "tradegrow": null,
+        "broker_a": null,
+        "broker_b": null,
+        "broker_c": null,
+        "broker_d": null
+      }
     },
     {
       "key": "platforms",
       "label": "Trading Platforms",
       "note": "Mobile app, web terminal, desktop terminal.",
-      "values": { "tradegrow": null, "broker_a": null, "broker_b": null, "broker_c": null, "broker_d": null }
+      "values": {
+        "tradegrow": "Web Terminal & Mobile App",
+        "broker_a": "Kite (Web, Mobile)",
+        "broker_b": "Groww App & Web",
+        "broker_c": "Angel One App & Web",
+        "broker_d": "Upstox Pro (Web, Mobile)"
+      }
     },
     {
       "key": "products",
       "label": "Product Availability",
-      "note": "Equity, F&amp;O, Currency, Commodity, Mutual Funds, IPO, Bonds.",
-      "values": { "tradegrow": null, "broker_a": null, "broker_b": null, "broker_c": null, "broker_d": null }
+      "note": "Equity, F&O, Currency, Commodity, Mutual Funds, IPO, Bonds.",
+      "values": {
+        "tradegrow": "Equity Cash, Intraday, F&O",
+        "broker_a": "Equity, F&O, Currency, Commodity, MF, IPO",
+        "broker_b": "Equity, F&O, MF, IPO",
+        "broker_c": "Equity, F&O, Commodity, Currency, MF",
+        "broker_d": "Equity, F&O, Commodity, Currency, MF, IPO"
+      }
     },
     {
       "key": "kyc",
       "label": "KYC Process",
-      "values": { "tradegrow": null, "broker_a": null, "broker_b": null, "broker_c": null, "broker_d": null }
+      "values": {
+        "tradegrow": "100% Digital Digilocker e-KYC",
+        "broker_a": "100% Digital e-KYC",
+        "broker_b": "100% Digital e-KYC",
+        "broker_c": "100% Digital e-KYC",
+        "broker_d": "100% Digital e-KYC"
+      }
     },
     {
       "key": "support",
       "label": "Customer Support Channels",
-      "values": { "tradegrow": null, "broker_a": null, "broker_b": null, "broker_c": null, "broker_d": null }
+      "values": {
+        "tradegrow": "Phone, Email, WhatsApp, Ticket Desk",
+        "broker_a": "Phone, Ticket Portal",
+        "broker_b": "In-app Help, Email",
+        "broker_c": "Phone, Chat, Ticket Desk",
+        "broker_d": "Phone, Ticket Desk, Chat"
+      }
     },
     {
       "key": "research",
       "label": "Research / Advisory",
-      "values": { "tradegrow": null, "broker_a": null, "broker_b": null, "broker_c": null, "broker_d": null }
+      "values": {
+        "tradegrow": "No tips / Execution only",
+        "broker_a": "No advisory desk / Varsity Education",
+        "broker_b": "No advisory / Educational content",
+        "broker_c": "Advisory / Research reports",
+        "broker_d": "Market analysis & News feed"
+      }
     },
     {
       "key": "api",
       "label": "API Access",
-      "values": { "tradegrow": null, "broker_a": null, "broker_b": null, "broker_c": null, "broker_d": null }
+      "values": {
+        "tradegrow": "Trading APIs (Developer Portal)",
+        "broker_a": "Kite Connect API (Paid)",
+        "broker_b": "Trading API",
+        "broker_c": "SmartAPI (Free)",
+        "broker_d": "Upstox API (Free/Paid tiers)"
+      }
     },
     {
       "key": "other",
-      "label": "Other Charges (call &amp; trade, auto square-off, payment gateway)",
-      "values": { "tradegrow": null, "broker_a": null, "broker_b": null, "broker_c": null, "broker_d": null }
+      "label": "Other Charges (call & trade, auto square-off)",
+      "values": {
+        "tradegrow": "Call & Trade: ₹50 / Auto Squareoff: ₹50",
+        "broker_a": "Call & Trade: ₹50 / Auto Squareoff: ₹50",
+        "broker_b": "Call & Trade: ₹50 / Auto Squareoff: ₹50",
+        "broker_c": "Call & Trade: ₹20 / Auto Squareoff: ₹20",
+        "broker_d": "Call & Trade: ₹50 / Auto Squareoff: ₹50"
+      }
     }
   ],
 

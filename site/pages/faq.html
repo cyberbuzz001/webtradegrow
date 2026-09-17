@@ -10,8 +10,23 @@
       <h1 class="h1">Questions, answered plainly</h1>
       <p class="lede">
         Including the uncomfortable ones. Where we do not yet have a confirmed answer, the answer
-        says so rather than filling the space.
+        says so rather than filling the space. Search by keyword or filter by category below.
       </p>
+    </div>
+
+    <!-- Live FAQ Search & Filter Bar -->
+    <div class="faq-search-box">
+      <div class="field" style="max-width:620px;margin-inline:auto">
+        <label for="faq-search-input" class="sr-only">Search questions</label>
+        <div class="search-input-wrap">
+          <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
+          </svg>
+          <input type="search" id="faq-search-input" placeholder="Search questions (e.g., STT, DP charge, margin, nominee, OTP)..." autocomplete="off">
+          <button type="button" id="faq-search-clear" class="search-clear-btn" aria-label="Clear search" hidden>&times;</button>
+        </div>
+        <p class="small muted" id="faq-search-count" style="margin-top:6px;text-align:center" hidden></p>
+      </div>
     </div>
 
     {{comp:faq}}

@@ -1,17 +1,16 @@
 <!--meta {
   "title": "Open an Account — Trade Grow",
-  "description": "The Trade Grow account opening process step by step: mobile verification, PAN, KYC, bank details, e-sign and activation. Never share your OTP with anyone."
+  "description": "The Trade Grow account opening process step by step: interactive digital KYC, mobile verification, PAN validation, and live application status tracking."
 }-->
 
 <section class="section">
   <div class="wrap">
     <div class="section__head">
       <p class="eyebrow">Account opening</p>
-      <h1 class="h1">What happens, step by step</h1>
+      <h1 class="h1">Open an account or track your application</h1>
       <p class="lede">
-        Before you start, it is worth knowing exactly what you will be asked for and why. Nothing
-        below should be a surprise once you begin, and nothing below involves sharing a credential
-        with a person.
+        Complete your digital onboarding with our step-by-step simulator, or track an existing application in real time.
+        Before you start, note that you will never be asked to share your credentials with any person.
       </p>
     </div>
 
@@ -26,7 +25,261 @@
       <a href="/support/">Support</a>.
     </div>
 
-    <ol class="steps">
+    <!-- Interactive Digital Portal -->
+    <div class="portal" id="onboarding-portal">
+      <div class="portal__tabs" role="tablist" aria-label="Account opening options">
+        <button class="portal__tab is-active" id="tab-apply" role="tab" aria-selected="true" aria-controls="panel-apply">
+          Start Digital KYC
+        </button>
+        <button class="portal__tab" id="tab-track" role="tab" aria-selected="false" aria-controls="panel-track">
+          Track Application Status
+        </button>
+      </div>
+
+      <!-- Tab Panel 1: Apply Simulator -->
+      <div class="portal__panel is-active" id="panel-apply" role="tabpanel" aria-labelledby="tab-apply">
+        <div class="stepper">
+          <div class="stepper__step is-active" data-step="1"><span>1</span> Mobile &amp; OTP</div>
+          <div class="stepper__step" data-step="2"><span>2</span> PAN &amp; Identity</div>
+          <div class="stepper__step" data-step="3"><span>3</span> Bank &amp; Segments</div>
+          <div class="stepper__step" data-step="4"><span>4</span> Activation</div>
+        </div>
+
+        <!-- Step 1: Mobile & OTP -->
+        <div class="portal-step is-active" id="kyc-step-1">
+          <h3 class="h4">Step 1: Mobile Verification</h3>
+          <p class="muted small">Enter your Aadhaar-linked mobile number to receive the verification OTP.</p>
+
+          <form id="form-kyc-mobile" class="calc__form" style="max-width:520px;margin-top:16px">
+            <div class="field">
+              <label for="kyc-phone">Mobile Number</label>
+              <div class="input-prefix-group">
+                <span class="input-prefix">+91</span>
+                <input type="tel" id="kyc-phone" name="phone" placeholder="9876543210" maxlength="10" pattern="[0-9]{10}" required autocomplete="tel">
+              </div>
+              <p class="field__hint">Must be registered with your Aadhaar for e-Sign verification.</p>
+            </div>
+
+            <div class="field" style="margin-top:12px">
+              <label class="check-label">
+                <input type="checkbox" id="kyc-consent-check" required>
+                <span>I confirm that I am a resident Indian citizen and agree to the <a href="/terms/" target="_blank">Terms</a> and <a href="/privacy/" target="_blank">Privacy Policy</a>.</span>
+              </label>
+            </div>
+
+            <button type="submit" class="btn btn--primary" id="btn-send-otp" style="margin-top:14px">Get Verification Code</button>
+          </form>
+
+          <!-- OTP Input Area (shown after Get OTP) -->
+          <div class="otp-box" id="kyc-otp-area" hidden>
+            <div class="notice notice--warn" style="margin-bottom:14px">
+              <strong>Enter the OTP yourself.</strong> Trade Grow agents will never ask for this code.
+            </div>
+            <p class="small">Enter the 6-digit code sent to your mobile: <strong id="disp-mobile"></strong></p>
+            <div class="otp-inputs" style="margin:12px 0">
+              <input type="text" id="kyc-otp-val" placeholder="849201" maxlength="6" pattern="[0-9]{6}" style="font-size:1.3rem;letter-spacing:0.25em;text-align:center;width:180px;padding:8px">
+              <button type="button" class="btn btn--ghost btn--sm" id="btn-mock-otp">Fill Demo OTP (849201)</button>
+            </div>
+            <button type="button" class="btn btn--primary" id="btn-verify-otp">Verify OTP &amp; Proceed &rarr;</button>
+          </div>
+        </div>
+
+        <!-- Step 2: PAN & Identity -->
+        <div class="portal-step" id="kyc-step-2">
+          <h3 class="h4">Step 2: PAN &amp; Identity Verification</h3>
+          <p class="muted small">Your PAN is required by SEBI to verify your identity against the Income Tax Department database.</p>
+
+          <form id="form-kyc-pan" class="calc__form" style="max-width:520px;margin-top:16px">
+            <div class="field">
+              <label for="kyc-pan">PAN Number</label>
+              <input type="text" id="kyc-pan" name="pan" placeholder="ABCDE1234F" maxlength="10" style="text-transform:uppercase" pattern="[A-Z]{5}[0-9]{4}[A-Z]{1}" required>
+              <p class="field__hint">Enter your 10-character alphanumeric PAN.</p>
+            </div>
+
+            <div class="field--row" style="margin-top:12px">
+              <div class="field">
+                <label for="kyc-dob">Date of Birth</label>
+                <input type="date" id="kyc-dob" name="dob" required>
+              </div>
+              <div class="field">
+                <label for="kyc-gender">Gender</label>
+                <select id="kyc-gender" name="gender" required>
+                  <option value="">Select</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="field" style="margin-top:12px">
+              <label for="kyc-name">Full Name (as on PAN)</label>
+              <input type="text" id="kyc-name" name="name" placeholder="e.g. Rajesh Kumar" required>
+            </div>
+
+            <div style="display:flex;gap:12px;margin-top:16px">
+              <button type="button" class="btn btn--ghost" id="btn-back-step-1">&larr; Back</button>
+              <button type="submit" class="btn btn--primary">Verify PAN &amp; Continue &rarr;</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Step 3: Bank & Segments -->
+        <div class="portal-step" id="kyc-step-3">
+          <h3 class="h4">Step 3: Bank Account &amp; Trading Segments</h3>
+          <p class="muted small">Payouts are legally remitted only to your own registered bank account.</p>
+
+          <form id="form-kyc-bank" class="calc__form" style="max-width:520px;margin-top:16px">
+            <div class="field">
+              <label for="kyc-bank-acc">Bank Account Number</label>
+              <input type="password" id="kyc-bank-acc" name="account" placeholder="Enter bank account number" required autocomplete="off">
+            </div>
+
+            <div class="field">
+              <label for="kyc-bank-ifsc">Bank IFSC Code</label>
+              <input type="text" id="kyc-bank-ifsc" name="ifsc" placeholder="HDFC0000123" maxlength="11" style="text-transform:uppercase" required>
+              <p class="field__hint" id="bank-detect-hint">Verified bank details will be validated via a penny-drop test.</p>
+            </div>
+
+            <div class="field" style="margin-top:16px">
+              <label id="seg-sel-label">Select Trading Segments</label>
+              <div style="display:grid;gap:8px;margin-top:6px" role="group" aria-labelledby="seg-sel-label">
+                <label class="check-label">
+                  <input type="checkbox" name="segments" value="Equity Cash" checked disabled>
+                  <span><strong>Equity Cash &amp; Delivery</strong> (Mandatory base segment)</span>
+                </label>
+                <label class="check-label">
+                  <input type="checkbox" name="segments" value="Equity Intraday" checked>
+                  <span><strong>Equity Intraday</strong> (Same day trading)</span>
+                </label>
+                <label class="check-label">
+                  <input type="checkbox" name="segments" value="Futures & Options" id="chk-fno">
+                  <span><strong>Futures &amp; Options (F&amp;O)</strong> <span class="muted small">(Requires income proof upload)</span></span>
+                </label>
+              </div>
+            </div>
+
+            <div style="display:flex;gap:12px;margin-top:20px">
+              <button type="button" class="btn btn--ghost" id="btn-back-step-2">&larr; Back</button>
+              <button type="submit" class="btn btn--primary">Complete &amp; Generate Application &rarr;</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Step 4: Confirmation & Reference -->
+        <div class="portal-step" id="kyc-step-4">
+          <div class="portal-success">
+            <div class="portal-success__icon">&#10003;</div>
+            <h3 class="h3">Application Submitted Successfully!</h3>
+            <p class="lede">Your digital onboarding request has been registered under your personal reference number.</p>
+
+            <div class="app-ref-card">
+              <span class="app-ref-card__label">Application Reference Number</span>
+              <strong class="app-ref-card__id" id="disp-app-ref">TG-APP-2026-XXXX</strong>
+              <p class="small muted">Save this reference ID. You will receive an SMS and email with details.</p>
+            </div>
+
+            <div class="next-steps-list">
+              <h4 class="h5">Next Steps in the Onboarding Pipeline</h4>
+              <ol class="steps steps--compact">
+                <li><strong>e-Sign:</strong> You will receive an Aadhaar OTP link to electronically sign your Account Opening Form (AOF).</li>
+                <li><strong>Bank Penny-Drop:</strong> ₹1 will be deposited to verify bank account ownership.</li>
+                <li><strong>UCC Allocation:</strong> Your Unique Client Code (UCC) and CDSL Demat details will be generated within 24 hours.</li>
+              </ol>
+            </div>
+
+            <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:20px">
+              <button type="button" class="btn btn--primary" id="btn-track-this-app">Track Application Status Now</button>
+              <a href="/pricing/" class="btn btn--ghost">Explore Pricing While You Wait</a>
+              <button type="button" class="btn btn--secondary" id="btn-reset-app">Start Another Application</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab Panel 2: Track Application Status -->
+      <div class="portal__panel" id="panel-track" role="tabpanel" aria-labelledby="tab-track">
+        <h3 class="h4">Track Application Status</h3>
+        <p class="muted small">Enter your application reference code (e.g. TG-APP-2026-XXXX) to check your verification stage.</p>
+
+        <form id="form-track-status" class="calc__form" style="max-width:520px;margin-top:16px">
+          <div class="field">
+            <label for="track-ref-input">Application Reference Number</label>
+            <div style="display:flex;gap:8px">
+              <input type="text" id="track-ref-input" name="ref" placeholder="TG-APP-2026-9142" style="text-transform:uppercase" required>
+              <button type="submit" class="btn btn--primary">Check Status</button>
+            </div>
+          </div>
+        </form>
+
+        <div id="track-result-area" style="margin-top:24px" hidden>
+          <div class="track-summary">
+            <div>
+              <span class="muted small">Application Reference:</span>
+              <strong id="track-disp-ref">TG-APP-2026-XXXX</strong>
+            </div>
+            <div>
+              <span class="muted small">Primary Applicant:</span>
+              <strong id="track-disp-name">Applicant Name</strong>
+            </div>
+            <div>
+              <span class="muted small">Current Stage:</span>
+              <span class="pill pill--ok" id="track-disp-stage">In Verification</span>
+            </div>
+          </div>
+
+          <div class="pipeline" id="track-pipeline">
+            <div class="pipeline__item is-done">
+              <div class="pipeline__dot">&#10003;</div>
+              <div class="pipeline__content">
+                <strong>1. Mobile &amp; Digilocker KYC</strong>
+                <span class="muted small">Aadhaar e-KYC and mobile identity verified</span>
+              </div>
+            </div>
+            <div class="pipeline__item is-done">
+              <div class="pipeline__dot">&#10003;</div>
+              <div class="pipeline__content">
+                <strong>2. PAN &amp; KRA Validation</strong>
+                <span class="muted small">PAN validated against Income Tax Department records</span>
+              </div>
+            </div>
+            <div class="pipeline__item is-done">
+              <div class="pipeline__dot">&#10003;</div>
+              <div class="pipeline__content">
+                <strong>3. Bank Account Penny-Drop</strong>
+                <span class="muted small">Name matched with banking records successfully</span>
+              </div>
+            </div>
+            <div class="pipeline__item is-active">
+              <div class="pipeline__dot">&bull;</div>
+              <div class="pipeline__content">
+                <strong>4. Aadhaar e-Sign &amp; IPV Verification</strong>
+                <span class="muted small">Electronic signing and photo verification in progress (Estimated: 2–4 hours)</span>
+              </div>
+            </div>
+            <div class="pipeline__item">
+              <div class="pipeline__dot">5</div>
+              <div class="pipeline__content">
+                <strong>5. Exchange UCC &amp; Demat Activation</strong>
+                <span class="muted small">Client code allocation and depository account linking</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="notice notice--tint" style="margin-top:16px">
+            Questions regarding this application? Contact support quoting your reference number via our <a href="/support/#ticket">Support Page</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step by Step Documentation -->
+    <div style="margin-top:50px">
+      <h2 class="h2">The Full Onboarding Process Explained</h2>
+      <p class="lede">Detailed breakdown of what happens behind the scenes during regulatory verification.</p>
+    </div>
+
+    <ol class="steps" style="margin-top:24px">
       <li>
         <h3>Mobile number</h3>
         <p>
@@ -196,7 +449,7 @@
         something else first, that is the right instinct.
       </p>
       <div class="cta-band__actions">
-        <a class="btn btn--primary btn--lg" href="{{raw:app.webUrl|/support/}}" data-ev="kyc_start">Begin Account Opening</a>
+        <a class="btn btn--primary btn--lg" href="#onboarding-portal" data-ev="kyc_start">Start Digital KYC</a>
         <a class="btn btn--ghost btn--lg" href="/verify/" data-ev="verify_page_view">Verify Our Details First</a>
         <a class="btn btn--ghost btn--lg" href="/support/">Ask a Question</a>
       </div>

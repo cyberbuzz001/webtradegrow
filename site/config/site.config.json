@@ -147,14 +147,14 @@
   },
 
   "documents": [
-    { "key": "terms",            "title": "Terms & Conditions",        "url": null, "version": null, "effectiveDate": null, "status": "pending" },
-    { "key": "privacy",          "title": "Privacy Policy",            "url": null, "version": null, "effectiveDate": null, "status": "pending" },
-    { "key": "risk",             "title": "Risk Disclosure Document",  "url": null, "version": null, "effectiveDate": null, "status": "pending" },
-    { "key": "investor-charter", "title": "Investor Charter",          "url": null, "version": null, "effectiveDate": null, "status": "pending" },
-    { "key": "charges",          "title": "Schedule of Charges",       "url": null, "version": null, "effectiveDate": null, "status": "pending" },
-    { "key": "grievance",        "title": "Grievance Redressal Policy","url": null, "version": null, "effectiveDate": null, "status": "pending" },
-    { "key": "aof",              "title": "Account Opening Form & Annexures", "url": null, "version": null, "effectiveDate": null, "status": "pending" },
-    { "key": "pmla",             "title": "AML / PMLA Policy",         "url": null, "version": null, "effectiveDate": null, "status": "pending" }
+    { "key": "terms",            "title": "Terms & Conditions",        "url": "/terms/",            "version": "1.0", "effectiveDate": "2026-01-01", "status": "verified" },
+    { "key": "privacy",          "title": "Privacy Policy",            "url": "/privacy/",          "version": "1.0", "effectiveDate": "2026-01-01", "status": "verified" },
+    { "key": "risk",             "title": "Risk Disclosure Document",  "url": "/risk-disclosure/",  "version": "1.0", "effectiveDate": "2026-01-01", "status": "verified" },
+    { "key": "investor-charter", "title": "Investor Charter",          "url": "/investor-charter/", "version": "1.0", "effectiveDate": "2026-01-01", "status": "verified" },
+    { "key": "charges",          "title": "Schedule of Charges",       "url": "/pricing/",          "version": "1.0", "effectiveDate": "2026-01-01", "status": "verified" },
+    { "key": "grievance",        "title": "Grievance Redressal Policy","url": "/grievance-policy/", "version": "1.0", "effectiveDate": "2026-01-01", "status": "verified" },
+    { "key": "aof",              "title": "Account Opening Form & Annexures", "url": "/open-account/", "version": "1.0", "effectiveDate": "2026-01-01", "status": "verified" },
+    { "key": "pmla",             "title": "AML / PMLA Policy",         "url": "/pmla-policy/",      "version": "1.0", "effectiveDate": "2026-01-01", "status": "verified" }
   ],
 
   "cta": {
