@@ -45,13 +45,19 @@ jobs:
       - name: Check internal links
         run: node build/check-links.js
 
+      # Structural accessibility only — no contrast, focus order or screen-reader
+      # checks. Passing here does not mean the site is accessible; see the script header.
+      - name: Check accessibility (structural)
+        run: node build/check-a11y.js
+
       - name: Report build output
         run: |
           echo "### Build output" >> "$GITHUB_STEP_SUMMARY"
           echo '```' >> "$GITHUB_STEP_SUMMARY"
-          echo "pages:  $(find dist -name '*.html' | wc -l)" >> "$GITHUB_STEP_SUMMARY"
-          echo "files:  $(find dist -type f | wc -l)" >> "$GITHUB_STEP_SUMMARY"
-          echo "size:   $(du -sh dist | cut -f1)" >> "$GITHUB_STEP_SUMMARY"
+          echo "pages:   $(find dist -name '*.html' | wc -l)" >> "$GITHUB_STEP_SUMMARY"
+          echo "files:   $(find dist -type f | wc -l)" >> "$GITHUB_STEP_SUMMARY"
+          echo "size:    $(du -sh dist | cut -f1)" >> "$GITHUB_STEP_SUMMARY"
+          echo "pending: $(grep -roh 'class=\"pending\"' dist --include='*.html' | wc -l) unverified values rendered" >> "$GITHUB_STEP_SUMMARY"
           echo '```' >> "$GITHUB_STEP_SUMMARY"
 
       - name: Configure Pages

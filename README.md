@@ -19,6 +19,8 @@ Then open <http://localhost:4321>. No `npm install` — there are no dependencie
 ```bash
 node build/build.js            # build to dist/
 node build/gen-learn-pages.js  # regenerate /learn pages after editing the generator
+node build/check-links.js      # internal link check (run with the same BASE_PATH as the build)
+node build/check-a11y.js       # structural accessibility scan
 ```
 
 **The build exits 1 if it finds a prohibited marketing claim.** Wire it into CI as a required check.
@@ -34,9 +36,12 @@ site/partials/*.html    Layout, header, footer
 site/assets/            CSS + JS (zero dependencies)
 build/build.js          Static site generator + compliance linter
 build/components.js     Config → HTML components
+build/check-links.js    Internal link checker (base-path aware)
+build/check-a11y.js     Structural accessibility scan
+.github/workflows/      CI: build → checks → deploy to Pages
 tools/                  acquisition-calculator.html (internal planning tool)
-docs/                   20 written deliverables
-dist/                   Build output — deploy this
+docs/                   Written deliverables (PRD, schema, playbooks, plans)
+dist/                   Build output — deploy this (gitignored)
 ```
 
 ---
@@ -126,11 +131,12 @@ customer can confirm it from an independent source.
 **Live preview:** <https://cyberbuzz001.github.io/webtradegrow/>
 
 Every push to `main` triggers [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml), which
-builds and publishes to GitHub Pages. Pull requests run the build and link check **without**
-deploying.
+builds and publishes to GitHub Pages. Pull requests run the build, link check and accessibility
+scan **without** deploying.
 
 **The build is the deploy gate.** `node build/build.js` exits 1 on any prohibited marketing claim,
-so such copy cannot reach the live site even if it gets merged.
+so such copy cannot reach the live site even if it gets merged. `check-links.js` and `check-a11y.js`
+gate it too — a dead link or a high-severity accessibility defect blocks the deploy.
 
 ### Base path
 

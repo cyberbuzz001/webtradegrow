@@ -249,7 +249,7 @@ code {
 .num--up { color: var(--ok); } .num--down { color: var(--danger); }
 
 .mini-breakdown { border: 1px solid var(--line-2); border-radius: 10px; padding: 13px; background: var(--bg-tint); }
-.mini-breakdown h4 { font-size: .8rem; text-transform: uppercase; letter-spacing: .07em; color: var(--muted); margin-bottom: 9px; }
+.mini-breakdown .mb-title { font-size: .8rem; text-transform: uppercase; letter-spacing: .07em; color: var(--muted); margin-bottom: 9px; }
 .mini-breakdown dl { display: grid; gap: 5px; margin: 0; font-size: .82rem; }
 .mini-breakdown div { display: flex; justify-content: space-between; gap: 10px; }
 .mini-breakdown dt { color: var(--muted); }

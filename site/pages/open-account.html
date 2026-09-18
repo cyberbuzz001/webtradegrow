@@ -54,6 +54,7 @@
 
       <!-- Tab Panel 1: Apply Simulator -->
       <div class="portal__panel is-active" id="panel-apply" role="tabpanel" aria-labelledby="tab-apply">
+        <h2 class="sr-only">Digital KYC walkthrough</h2>
         <div class="stepper">
           <div class="stepper__step is-active" data-step="1"><span>1</span> Mobile &amp; OTP</div>
           <div class="stepper__step" data-step="2"><span>2</span> PAN &amp; Identity</div>
@@ -93,6 +94,7 @@
             </div>
             <p class="small">Enter the 6-digit code sent to your mobile: <strong id="disp-mobile"></strong></p>
             <div class="otp-inputs" style="margin:12px 0">
+              <label class="sr-only" for="kyc-otp-val">Enter the 6-digit verification code</label>
               <input type="text" id="kyc-otp-val" placeholder="849201" maxlength="6" pattern="[0-9]{6}" style="font-size:1.3rem;letter-spacing:0.25em;text-align:center;width:180px;padding:8px">
               <button type="button" class="btn btn--ghost btn--sm" id="btn-mock-otp">Fill Demo OTP (849201)</button>
             </div>
@@ -215,6 +217,7 @@
 
       <!-- Tab Panel 2: Track Application Status -->
       <div class="portal__panel" id="panel-track" role="tabpanel" aria-labelledby="tab-track">
+        <h2 class="sr-only">Track an existing application</h2>
         <h3 class="h4">Track Application Status</h3>
         <p class="muted small">Enter your application reference code (e.g. TG-APP-2026-XXXX) to check your verification stage.</p>
 

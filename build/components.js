@@ -224,7 +224,7 @@ module.exports = function makeComponents({ cfg, PENDING, isBlank, esc }) {
         (e) => `
       <div class="panel">
         <div class="panel__head">
-          <h3 class="h4">${esc(e.name)} Membership</h3>${statusPill(e.status)}
+          <h2 class="h4">${esc(e.name)} Membership</h2>${statusPill(e.status)}
         </div>
         <dl class="kvlist">
           ${row('Member Code', val(e.memberCode))}
@@ -242,7 +242,7 @@ module.exports = function makeComponents({ cfg, PENDING, isBlank, esc }) {
         (d) => `
       <div class="panel">
         <div class="panel__head">
-          <h3 class="h4">${esc(d.name)}</h3>${statusPill(d.status)}
+          <h2 class="h4">${esc(d.name)}</h2>${statusPill(d.status)}
         </div>
         <dl class="kvlist">
           ${row('DP ID', val(d.dpId))}
@@ -257,7 +257,7 @@ module.exports = function makeComponents({ cfg, PENDING, isBlank, esc }) {
 
     return `
     <div class="panel" id="entity">
-      <div class="panel__head"><h3 class="h4">${icon(ICONS.building)} Legal Entity</h3></div>
+      <div class="panel__head"><h2 class="h4">${icon(ICONS.building)} Legal Entity</h3></div>
       <dl class="kvlist">
         ${row('Legal name', val(S.entity.legalName))}
         ${row('Entity type', val(S.entity.entityType))}
@@ -273,7 +273,7 @@ module.exports = function makeComponents({ cfg, PENDING, isBlank, esc }) {
 
     <div class="panel" id="sebi">
       <div class="panel__head">
-        <h3 class="h4">SEBI Registration</h3>${statusPill(S.regulatory.sebi.status)}
+        <h2 class="h4">SEBI Registration</h2>${statusPill(S.regulatory.sebi.status)}
       </div>
       <dl class="kvlist">
         ${row('Registration number', val(S.regulatory.sebi.registrationNumber))}
@@ -290,7 +290,7 @@ module.exports = function makeComponents({ cfg, PENDING, isBlank, esc }) {
     ${depBlocks}
 
     <div class="panel" id="office">
-      <div class="panel__head"><h3 class="h4">Offices</h3></div>
+      <div class="panel__head"><h2 class="h4">Offices</h3></div>
       <dl class="kvlist">
         ${row('Registered office', addr(o))}
         ${row('Correspondence office', addr(c))}
@@ -298,7 +298,7 @@ module.exports = function makeComponents({ cfg, PENDING, isBlank, esc }) {
     </div>
 
     <div class="panel" id="officers">
-      <div class="panel__head"><h3 class="h4">Named Officers</h3></div>
+      <div class="panel__head"><h2 class="h4">Named Officers</h3></div>
       <dl class="kvlist">
         ${row('Compliance Officer', val(S.officers.compliance.name))}
         ${row('Compliance email', val(S.officers.compliance.email))}
@@ -375,7 +375,7 @@ module.exports = function makeComponents({ cfg, PENDING, isBlank, esc }) {
 
         return `
       <div class="pricing-seg">
-        <h3 class="h4">${esc(seg.label)}</h3>
+        <h2 class="h4">${esc(seg.label)}</h3>
         <div class="table-scroll">
           <table class="table table--pricing">
             <caption class="sr-only">${esc(seg.label)} charges</caption>
@@ -498,7 +498,7 @@ module.exports = function makeComponents({ cfg, PENDING, isBlank, esc }) {
       </table>
     </div>
     <p class="disclaimer">${esc(C.disclaimer)}</p>
-    <h3 class="h4">How to compare brokers properly</h3>
+    <h2 class="h4">How to compare brokers properly</h3>
     <ol class="steps steps--compact">
       ${C.howToCompare.map((s) => `<li>${esc(s)}</li>`).join('')}
     </ol>`;

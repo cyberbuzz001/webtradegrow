@@ -81,17 +81,28 @@ who to call next.
 ```
 /                          Homepage
 /verify/                   ★ Verification hub — the strategic centre of the site
-    #entity #sebi #office #officers #documents #how-to-verify
+    #entity #sebi #office #officers #official-channels #documents #how-to-verify
 /pricing/                  Charges, split Trade Grow vs statutory
     #calculator            Interactive cost calculator
 /compare/                  Source-linked broker comparison
-/platform/                 Screens, labelled illustrative + demo video slot
-/open-account/             Step-by-step onboarding, OTP warnings
+/platform/                 Interactive terminal walkthrough, labelled illustrative
+/open-account/             Onboarding preview + link to the real platform signup
+    #onboarding-portal     In-browser walkthrough (submits nothing)
 /security/                 Implemented controls only
 /security-awareness/       Fraud red flags
-/support/                  Contact, escalation ladder, ticket form
+/support/                  Contact, escalation ladder, ticket form + tracker
     #escalation #ticket
-/faq/                      40 FAQs, 5 categories, FAQPage schema
+/faq/                      42 FAQs, 5 categories, keyword search, FAQPage schema
+
+Legal (versioned, linked from /verify#documents):
+/terms/                    Terms & Conditions
+/privacy/                  Privacy Policy
+/risk-disclosure/          Risk Disclosure Document
+/investor-charter/         Investor Charter
+/grievance-policy/         Grievance Redressal Policy
+/pmla-policy/              AML / PMLA Policy
+
+404.html                   Not-found page; warns that near-miss addresses are a fraud signal
 /learn/                    SEO hub
     how-to-verify-a-stock-broker/
     brokerage-charges-explained/

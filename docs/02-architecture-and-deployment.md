@@ -120,18 +120,41 @@ anonymise well.
 
 ## 5. Testing plan
 
-### Automated (CI, required to merge)
+### Automated
 
-| Check | Tool |
-|---|---|
-| **Compliance lint** | `build/build.js` — fails on prohibited claims |
-| Build succeeds | `node build/build.js` |
-| HTML validity | `html-validate` on `dist/**` |
-| Broken internal links | link checker on `dist/` |
-| Lighthouse ≥ 90 ×4 | `lhci` on key pages |
-| Accessibility | `axe-core` — zero critical violations |
-| Calculator unit tests | Charge math per segment, per side |
-| API contract tests | Once Zone 2 exists |
+**Live in CI today** (`.github/workflows/deploy.yml`, gates the deploy):
+
+| Check | Tool | Fails build on |
+|---|---|---|
+| **Compliance lint** | `build/build.js` | Any prohibited claim |
+| Build succeeds | `build/build.js` | Template/config error |
+| Broken internal links | `build/check-links.js` | Dead link, or a root-absolute link missing the base prefix |
+| Structural accessibility | `build/check-a11y.js` | Any HIGH finding |
+
+**Not yet wired — do not claim these as passing until they are:**
+
+| Check | Tool | Why it matters |
+|---|---|---|
+| HTML validity | `html-validate` on `dist/**` | Catches malformed markup the regex checkers miss |
+| Lighthouse ≥ 90 ×4 | `lhci` on key pages | Perf/SEO targets in §7 are currently aspirations, not measurements |
+| Full accessibility | `axe-core` or Lighthouse a11y | See the gap below |
+| Calculator unit tests | Charge math per segment, per side | Currently verified manually only |
+| API contract tests | Once Zone 2 exists | — |
+
+#### What `check-a11y.js` does and does not cover
+
+It is a static, zero-dependency scan of the built HTML. It catches: duplicate ids,
+unlabelled form controls, images without `alt`, controls with no accessible name, skipped
+heading levels, missing/multiple `h1`, positive `tabindex`, tables without a caption,
+missing `lang` or `title`.
+
+It does **not** catch colour contrast, focus order, keyboard traps, screen-reader output,
+ARIA correctness beyond attribute presence, or anything rendered by JavaScript after load.
+
+> A pass here means "no obvious structural defects", not "accessible". The WCAG AA claim in
+> `docs/01-design-system.md` §7 rests on design decisions and manual keyboard testing, and
+> has not been confirmed by an automated contrast or screen-reader audit. Treat it as
+> intended-and-designed-for, not verified, until `lhci`/`axe` are wired up.
 
 ### Calculator test cases (must pass)
 
@@ -211,19 +234,34 @@ drills** — an untested backup is a hypothesis.
 
 ## 7. Performance targets
 
-| Metric | Target |
-|---|---|
-| Lighthouse Performance | ≥ 90 |
-| Accessibility | ≥ 90 |
-| SEO | ≥ 90 |
-| Best Practices | ≥ 90 |
-| LCP | < 2.0s on 4G |
-| CLS | < 0.05 |
-| Total page weight | < 250 KB |
+| Metric | Target | Status |
+|---|---|---|
+| Total page weight | < 250 KB | **Measured — met** (see below) |
+| Lighthouse Performance | ≥ 90 | Not measured |
+| Accessibility | ≥ 90 | Not measured (structural scan only) |
+| SEO | ≥ 90 | Not measured |
+| Best Practices | ≥ 90 | Not measured |
+| LCP | < 2.0s on 4G | Not measured |
+| CLS | < 0.05 | Not measured |
 
-**How the current build meets these:** system font stack (no web-font request, no FOUT), inline SVG
-icons (no icon font, no sprite request), one CSS file, two small JS files both deferred, config
-inlined at build time (no client-side hydration, no layout shift), zero third-party requests.
+> Only the first row has been verified. The rest are targets the build is *designed* to hit,
+> not results anyone has recorded. Wire `lhci` into CI before quoting them to anyone.
+
+**Measured page weight** (uncompressed / gzipped as a CDN actually serves it):
+
+| | HTML | + CSS + JS = first load |
+|---|---|---|
+| `/` | 40 KB | **110 KB** (9 KB gz page + 9 KB gz CSS + 6 KB gz JS ≈ **24 KB gz**) |
+| `/faq/` (largest) | 45 KB | 115 KB |
+| `/pricing/` | 29 KB | 99 KB |
+| `/support/` (smallest) | 22 KB | 92 KB |
+
+Shared assets: `styles.css` 44 KB (9 KB gz), `app.js` 25 KB (6 KB gz), `calculator.js` 8 KB
+(pricing page only). Zero images, zero web fonts, zero third-party requests.
+
+**Why it stays small:** system font stack (no web-font request, no FOUT), inline SVG icons (no icon
+font or sprite), one stylesheet, deferred JS, and config inlined at build time so there is no
+client-side hydration and no layout shift from late-arriving values.
 
 **Before adding any dependency to the marketing site, check it against this table.** A tag manager
 alone typically costs 15–25 Lighthouse points.
