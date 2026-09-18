@@ -28,6 +28,29 @@
     </div>
 
     {{comp:regulatoryDetail}}
+
+    <div class="panel" id="official-channels">
+      <div class="panel__head"><h3 class="h4">Official addresses</h3></div>
+      <p class="muted small" style="margin-bottom:14px">
+        These are the only addresses we use. Note that our platform runs on a different domain from
+        this website &mdash; that is intentional, and it is listed here precisely so you can confirm
+        it rather than having to guess. If you are ever sent to an address that is not on this list,
+        it is not us, even if the page looks identical to ours.
+      </p>
+      <dl class="kvlist">
+        <div class="kv"><dt>Website</dt><dd>{{cfg:brand.domain}}</dd></div>
+        <div class="kv"><dt>Platform sign-in / registration</dt><dd>{{cfg:app.webUrl}}</dd></div>
+        <div class="kv"><dt>Android app</dt><dd>{{cfg:app.androidUrl}}</dd></div>
+        <div class="kv"><dt>iOS app</dt><dd>{{cfg:app.iosUrl}}</dd></div>
+        <div class="kv"><dt>Support phone</dt><dd>{{cfg:support.phoneDisplay}}</dd></div>
+        <div class="kv"><dt>Support email</dt><dd>{{cfg:support.email}}</dd></div>
+      </dl>
+      <p class="muted small">
+        Before entering any detail, check the address bar character by character. We will never
+        send you an app file over WhatsApp, email or SMS, and you should never install a trading
+        app from a link in a message.
+      </p>
+    </div>
   </div>
 </section>
 

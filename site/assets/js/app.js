@@ -125,6 +125,10 @@
       var a = e.target.closest('a[href^="http"]');
       if (!a) return;
       if (a.hostname === location.hostname) return;
+      // A link that declares its own event is not a verification click. Without this, the
+      // external account-opening CTA would be counted as independent verification and would
+      // inflate the one metric that is supposed to prove customers are checking us.
+      if (a.hasAttribute('data-ev')) return;
       track('registration_verify_click', { host: a.hostname });
     },
     { passive: true }
