@@ -160,10 +160,39 @@ missing `lang` or `title`.
 It does **not** catch colour contrast, focus order, keyboard traps, screen-reader output,
 ARIA correctness beyond attribute presence, or anything rendered by JavaScript after load.
 
-> A pass here means "no obvious structural defects", not "accessible". Contrast is now covered
+> A pass here means "no obvious structural defects", not "accessible". Contrast is covered
 > separately by `build/contrast.js` and by Lighthouse in CI, both of which this scan cannot do.
-> Focus order, keyboard traps and screen-reader output remain **unverified** — those need manual
-> testing, and no automated tool substitutes for it.
+
+#### Manual keyboard audit — done, with results
+
+Performed in a real browser with real key events, not scripted focus. What was checked and found:
+
+| Check | Result |
+|---|---|
+| Skip link | **Pass.** First Tab reveals it; activates to `#main` |
+| Positive `tabindex` anywhere | **None** |
+| Hidden tab panels | **Pass.** `display:none`, so their form fields are out of the tab sequence |
+| Mobile nav closed | **Pass.** `display:none`, 0 focusable links |
+| Mobile nav open/close | **Pass.** `aria-expanded` and the button label both update; no trap |
+| Form focus indicator | **Pass.** Border `#1B4DFF` at **5.91:1** vs background and **4.76:1** vs the unfocused border. The `outline:none` is a replacement, not a removal — meets 1.4.11 and 2.4.7 |
+| **Tablist arrow keys** | **Failed — now fixed.** See below |
+
+**The one real defect.** All three tabsets (`/support/`, `/open-account/`, `/platform/`) used
+`role="tab"` but implemented none of the keyboard behaviour that role promises: arrow keys did
+nothing, and every tab sat in the page tab sequence instead of a roving tabindex.
+
+Declaring `role="tab"` tells assistive technology this is a tab widget; users of that technology
+then try arrow keys, and nothing happened. Fixed with a generic layer in `app.js` that attaches to
+any `[role="tablist"]` and reuses each tabset's existing click handler, so the three bespoke
+implementations did not need rewriting. Verified: Arrow Left/Right/Up/Down, Home, End, wrap-around,
+panel switching, and `aria-selected` / roving `tabindex` staying in sync under both keyboard and
+mouse activation.
+
+`check-a11y.js` now also asserts that every `role="tab"` carries `aria-controls` and
+`aria-selected`, and that every `role="tablist"` is labelled.
+
+**Still unverified:** screen-reader output (NVDA/JAWS/VoiceOver). No tool here substitutes for it,
+and nothing in this document should be read as claiming it has been tested.
 
 ### Calculator test cases (must pass)
 

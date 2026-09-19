@@ -693,4 +693,49 @@
       alert('Simulated Payout: Under exchange rules, payouts are remitted directly to your primary verified bank account within 24 hours.');
     });
   }
+
+  /* --------------------------------------------------- tablist keyboard layer
+
+     Using role="tab" tells assistive technology this is a tab widget, and users of
+     that technology then expect arrow keys to move between tabs and only the selected
+     tab to sit in the page's tab sequence (WAI-ARIA Authoring Practices, Tabs pattern).
+     The tabsets on /support/, /open-account/ and /platform/ each have their own click
+     handlers; rather than rewrite three of them, this adds the keyboard behaviour on
+     top and reuses whatever activation already exists by synthesising a click.
+  */
+
+  document.querySelectorAll('[role="tablist"]').forEach(function (list) {
+    var tabs = Array.prototype.slice.call(list.querySelectorAll('[role="tab"]'));
+    if (tabs.length < 2) return;
+
+    // Roving tabindex: Tab enters the tablist once, arrows move within it.
+    function sync() {
+      tabs.forEach(function (t) {
+        t.setAttribute('tabindex', t.getAttribute('aria-selected') === 'true' ? '0' : '-1');
+      });
+    }
+    sync();
+
+    list.addEventListener('keydown', function (e) {
+      var i = tabs.indexOf(document.activeElement);
+      if (i < 0) return;
+
+      var next;
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') next = tabs[(i + 1) % tabs.length];
+      else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') next = tabs[(i - 1 + tabs.length) % tabs.length];
+      else if (e.key === 'Home') next = tabs[0];
+      else if (e.key === 'End') next = tabs[tabs.length - 1];
+      else return;
+
+      e.preventDefault();
+      next.click(); // reuse the tabset's own activation logic
+      next.focus();
+      sync();
+    });
+
+    // Mouse activation must leave the roving tabindex correct too.
+    list.addEventListener('click', function () {
+      setTimeout(sync, 0);
+    });
+  });
 })();

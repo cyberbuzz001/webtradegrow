@@ -223,8 +223,11 @@ Mobile-first. Breakpoints: `560` · `760` · `900` · `980` · `1040`.
 - Icons `aria-hidden`; meaning always carried by adjacent text
 - `prefers-reduced-motion` disables transitions and smooth scrolling
 - Colour never carries meaning alone — every status pill pairs a glyph with a text label
+- Tab widgets follow the WAI-ARIA Tabs pattern: roving tabindex, Arrow/Home/End keys, and
+  aria-selected kept in sync. Implemented generically in app.js for any [role="tablist"]
 
-Target: axe-core zero critical violations; Lighthouse Accessibility ≥ 90.
+Measured: Lighthouse Accessibility 100 on every page checked. Contrast computed by build/contrast.js.
+Keyboard behaviour manually audited (see docs/02 §5). Screen-reader output remains untested.
 
 ---
 

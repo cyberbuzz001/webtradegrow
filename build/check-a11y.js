@@ -122,6 +122,20 @@ function check(file) {
   const h1s = heads.filter((h) => h[1] === '1').length;
   if (h1s !== 1) add('med', 'h1-count', `${h1s} <h1> on page (expected exactly 1)`);
 
+  // --- tabs -----------------------------------------------------------------
+  // role="tab" promises a keyboard widget. The arrow-key behaviour itself lives in
+  // app.js and cannot be checked statically, but the attributes it depends on can.
+  for (const m of html.matchAll(/<[a-z]+\b[^>]*\brole\s*=\s*"tab"[^>]*>/gi)) {
+    const tag = m[0];
+    if (!attr(tag, 'aria-controls')) add('med', 'tab-no-aria-controls', tag.slice(0, 80));
+    if (!attr(tag, 'aria-selected')) add('med', 'tab-no-aria-selected', tag.slice(0, 80));
+  }
+  for (const m of html.matchAll(/<[a-z]+\b[^>]*\brole\s*=\s*"tablist"[^>]*>/gi)) {
+    if (!attr(m[0], 'aria-label') && !attr(m[0], 'aria-labelledby')) {
+      add('med', 'tablist-no-label', m[0].slice(0, 80));
+    }
+  }
+
   // --- misc -----------------------------------------------------------------
   for (const m of html.matchAll(/\stabindex\s*=\s*"(\d+)"/g)) {
     if (+m[1] > 0) add('med', 'positive-tabindex', `tabindex="${m[1]}" breaks natural focus order`);
@@ -157,5 +171,9 @@ if (SEV.high) {
   console.log(`\n  FAILED: ${SEV.high} high-severity accessibility issue(s).\n`);
   process.exitCode = 1;
 } else {
-  console.log(`\n  No high-severity issues. (Contrast, focus order and screen-reader\n  behaviour are NOT covered here — they still need a manual audit.)\n`);
+  console.log(
+    `\n  No high-severity issues.\n` +
+      `  Not covered here: contrast (see build/contrast.js + lhci),\n` +
+      `  and screen-reader output (still needs manual testing).\n`
+  );
 }
