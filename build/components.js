@@ -50,14 +50,13 @@ module.exports = function makeComponents({ cfg, PENDING, isBlank, esc }) {
     const cell = (label, value, href, linkLabel) => `
       <div class="trustbar__item">
         <dt class="trustbar__label">${esc(label)}</dt>
-        <dd class="trustbar__value">${value}</dd>
-        ${
+        <dd class="trustbar__value">${value}${
           href
             ? `<a class="trustbar__verify" href="${esc(href)}" target="_blank" rel="noopener noreferrer">
                  ${icon(ICONS.search)} Verify<span class="sr-only"> ${esc(label)} — opens ${esc(linkLabel || 'official source')}</span>
                </a>`
             : ''
-        }
+        }</dd>
       </div>`;
 
     return `

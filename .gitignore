@@ -21,3 +21,6 @@ desktop.ini
 # Logs
 *.log
 npm-debug.log*
+
+# Lighthouse CI output
+.lighthouseci/

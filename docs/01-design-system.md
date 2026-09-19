@@ -29,7 +29,7 @@ scams customers have been warned about. Looking like a regulated utility is the 
 --ink:       #0A2540   /* primary text, deep navy — the institutional anchor */
 --ink-2:     #1E3A5F   /* secondary text */
 --muted:     #5A6B87   /* supporting copy */
---muted-2:   #8095B0   /* labels, captions */
+--muted-2:   #617186   /* labels, captions */
 
 --brand:     #1B4DFF   /* primary action. ONE accent, used sparingly */
 --brand-700: #1039CC
@@ -39,8 +39,8 @@ scams customers have been warned about. Looking like a regulated utility is the 
 --teal:      #0FB5A5   /* secondary accent: logo, verify links on dark */
 --teal-50:   #E9FAF8
 
---ok:        #0E8A5F   --ok-50:     #E8F7F0   /* verified */
---warn:      #A9640B   --warn-50:   #FDF4E5   /* pending / illustrative */
+--ok:        #0D7E57   --ok-50:     #E8F7F0   /* verified */
+--warn:      #9F5E0A   --warn-50:   #FDF4E5   /* pending / illustrative */
 --danger:    #C0342B   --danger-50: #FDEEED   /* fraud warnings only */
 
 --bg:        #FFFFFF   --bg-tint:  #F7F9FC   --bg-deep: #071B31
@@ -59,8 +59,39 @@ scams customers have been warned about. Looking like a regulated utility is the 
 > `--ok` green marks *verified*, not *profitable*. Using the same green for both would let a status
 > indicator read as a performance claim.
 
-**Contrast:** all text meets WCAG AA (4.5:1 body, 3:1 large). `--muted` on `--bg` = 5.9:1;
-`--muted` on `--bg-tint` = 5.6:1.
+**Contrast — computed, not asserted.** Run `node build/contrast.js`; it reads the tokens straight
+out of `styles.css`, so this table cannot drift from the stylesheet. All 14 pairs that occur in the
+rendered site clear WCAG AA for small text (4.5:1):
+
+| Pair | Ratio |
+|---|---|
+| `--ink` on white | 15.54:1 |
+| `--ink-2` on white | 11.50:1 |
+| `--brand` on white | 5.91:1 |
+| `--danger` on white | 5.57:1 |
+| `--muted` on white | 5.40:1 |
+| `--warn` on white | 5.15:1 |
+| `--ok` on white | 5.07:1 |
+| `--muted` on `--bg-tint` | 5.12:1 |
+| `--muted-2` on white | 4.98:1 |
+| `--danger` on `--danger-50` | 4.94:1 |
+| `--muted-2` on `--bg-tint` | 4.72:1 |
+| `--warn` on `--warn-50` | 4.72:1 |
+| `--ok` on `--ok-50` | 4.59:1 |
+
+> An earlier version of this document claimed 5.9:1 for `--muted` on white. The real figure is
+> 5.40:1 — it passes, but the number was wrong because it was written rather than calculated.
+> Three tokens genuinely failed and were darkened: `--muted-2` (3.07 → 4.98), `--ok` (4.36 → 5.07)
+> and `--warn` (4.26 on `--warn-50` → 4.72). The `--warn` pair is the `.pending` badge, the single
+> most important component on the site, and it was failing AA.
+
+**Two exceptions handled separately:**
+
+- **The dark terminal mock** on `/platform/` re-points `--muted`, `--muted-2`, `--ok` and `--danger`
+  inside `[data-theme="dark"]`, because light-theme tokens fall to ~3:1 on a dark surface.
+- **The WhatsApp CTA** (`.btn--wa`, `.fab--wa`) keeps the brand green `#25D366` but uses dark ink
+  text. White on that green is **1.98:1** — a well-known brand-colour trap. Dark ink gives 7.83:1
+  and keeps the green recognisable.
 
 ---
 

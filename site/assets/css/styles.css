@@ -11,7 +11,7 @@
   --ink:        #0A2540;   /* primary text, deep navy */
   --ink-2:      #1E3A5F;
   --muted:      #5A6B87;
-  --muted-2:    #8095B0;
+  --muted-2:    #617186;   /* 4.72:1 on tint, 5.24:1 on white — AA small text */
 
   --brand:      #1B4DFF;   /* primary action */
   --brand-700:  #1039CC;
@@ -21,9 +21,9 @@
   --teal:       #0FB5A5;   /* secondary accent, used sparingly */
   --teal-50:    #E9FAF8;
 
-  --ok:         #0E8A5F;
+  --ok:         #0D7E57;   /* 4.59:1 on ok-50 — AA small text */
   --ok-50:      #E8F7F0;
-  --warn:       #A9640B;
+  --warn:       #9F5E0A;   /* 4.72:1 on warn-50 — the .pending badge must be readable */
   --warn-50:    #FDF4E5;
   --danger:     #C0342B;
   --danger-50:  #FDEEED;
@@ -196,6 +196,10 @@ code {
 
 .btn--link { background: none; padding: 0; color: var(--brand); }
 
+/* WhatsApp CTA — brand green, dark text (white on #25D366 is 1.98:1 and fails AA). */
+.btn--wa { background: #25D366; border-color: #25D366; color: var(--ink); }
+.btn--wa:hover { background: #1FB855; border-color: #1FB855; color: var(--ink); }
+
 .ico { width: 18px; height: 18px; flex: 0 0 auto; }
 
 /* ------------------------------------------------------------------ hero */
@@ -286,7 +290,8 @@ code {
 }
 .trustbar__item { background: var(--ink); padding: 17px 18px; }
 .trustbar__label { font-size: .74rem; text-transform: uppercase; letter-spacing: .075em; color: #8FA8C6; font-weight: 650; margin-bottom: 5px; }
-.trustbar__value { margin: 0 0 9px; font-weight: 650; font-size: .96rem; color: #fff; word-break: break-word; }
+.trustbar__value { margin: 0; display: flex; flex-direction: column; align-items: flex-start; gap: 9px;
+                   font-weight: 650; font-size: .96rem; color: #fff; word-break: break-word; }
 .trustbar__verify {
   display: inline-flex; align-items: center; gap: 5px;
   font-size: .8rem; font-weight: 650; color: #7FE3D8; text-decoration: none;
@@ -665,8 +670,8 @@ code {
   padding: 12px 18px; border-radius: 100px; text-decoration: none;
   font-weight: 650; font-size: .92rem; box-shadow: var(--sh-3);
 }
-.fab--wa { background: #25D366; color: #fff; }
-.fab--wa:hover { background: #1FB855; color: #fff; }
+.fab--wa { background: #25D366; color: var(--ink); }
+.fab--wa:hover { background: #1FB855; color: var(--ink); }
 .fab svg { width: 21px; height: 21px; }
 @media (max-width: 760px) {
   .fab { bottom: 76px; padding: 12px; }
@@ -829,6 +834,16 @@ code {
 }
 .terminal-showcase__screen { min-height: 460px; transition: background .2s, color .2s; }
 .terminal-showcase__screen[data-theme="dark"] { background: #0B192C; color: #E3EAF2; }
+
+/* The light-theme tokens (--muted, --ok, --danger) are tuned for white backgrounds and
+   fall to ~3:1 on the dark terminal. Re-point them inside the dark screen only; each
+   value below clears 4.5:1 against the darkest and lightest terminal surfaces. */
+.terminal-showcase__screen[data-theme="dark"] {
+  --muted:   #9DB2CC;   /* 6.73:1 */
+  --muted-2: #8FA8C6;   /* 5.98:1 */
+  --ok:      #2ECC8F;   /* 7.06:1 */
+  --danger:  #FF8080;   /* 6.02:1 */
+}
 .terminal-showcase__screen[data-theme="light"] { background: #FFFFFF; color: #0A2540; }
 .terminal-view { display: none; padding: 24px; }
 .terminal-view.is-active { display: block; }

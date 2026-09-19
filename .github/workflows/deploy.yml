@@ -70,6 +70,37 @@ jobs:
         with:
           path: dist
 
+  lighthouse:
+    name: Lighthouse (perf / a11y / SEO)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      # Root-mode build on purpose: a BASE_PATH build emits /webtradegrow/... links,
+      # which a server rooted at dist/ cannot resolve.
+      - name: Build (root mode)
+        run: node build/build.js
+        env:
+          BASE_PATH: ''
+          SITE_URL: ''
+
+      - name: Check colour contrast against the palette tokens
+        run: node build/contrast.js
+
+      - name: Lighthouse CI
+        run: npx --yes @lhci/cli@0.14.x autorun
+
+      - name: Upload reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-reports
+          path: .lighthouseci/
+          retention-days: 14
+
   deploy:
     name: Deploy to GitHub Pages
     if: github.event_name != 'pull_request'

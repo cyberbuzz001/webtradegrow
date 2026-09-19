@@ -290,7 +290,10 @@ function countPending() {
 
 function serve() {
   const http = require('http');
-  const PORT = process.env.PORT || 4321;
+  // --port N works the same on every shell; an env-var prefix does not, because tools that
+  // spawn this command through cmd.exe on Windows cannot set one.
+  const portArg = process.argv.indexOf('--port');
+  const PORT = (portArg > -1 && process.argv[portArg + 1]) || process.env.PORT || 4321;
   const TYPES = {
     '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8',
     '.js': 'text/javascript; charset=utf-8', '.json': 'application/json',

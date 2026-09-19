@@ -171,12 +171,20 @@
       'On a turnover of ' + inr(r.turnover) +
       (qty > 0 ? ' · ' + inr(r.breakeven) + ' per unit to break even' : '');
 
-    var html = '<div class="calc__group">Charged by Trade Grow</div>';
-    html += line('Brokerage', r.brokerage, 'is-brokerage');
-    html += '<div class="calc__group">Statutory &amp; regulatory (set by Govt / Exchange / SEBI)</div>';
-    r.statutory.forEach(function (s) { html += line(s.label, s.amount); });
-    html += line(CFG.gst.label + ' (' + CFG.gst.ratePercent + '%)', r.gst);
-    html += line('<strong>Total estimated cost</strong>', r.total, 'is-total');
+    // A <dl> may only contain dt/dd pairs (optionally wrapped in a div), so the group
+    // headings sit between separate lists rather than inside one.
+    var html = '';
+    html += '<p class="calc__group">Charged by Trade Grow</p>';
+    html += '<dl class="calc__lines">' + line('Brokerage', r.brokerage, 'is-brokerage') + '</dl>';
+
+    html += '<p class="calc__group">Statutory &amp; regulatory (set by Govt / Exchange / SEBI)</p>';
+    var stat = '';
+    r.statutory.forEach(function (s) { stat += line(s.label, s.amount); });
+    stat += line(CFG.gst.label + ' (' + CFG.gst.ratePercent + '%)', r.gst);
+    html += '<dl class="calc__lines">' + stat + '</dl>';
+
+    html += '<dl class="calc__lines">' +
+            line('<strong>Total estimated cost</strong>', r.total, 'is-total') + '</dl>';
     el.lines.innerHTML = html;
 
     var notes = [];

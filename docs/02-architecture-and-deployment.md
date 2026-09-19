@@ -131,13 +131,22 @@ anonymise well.
 | Broken internal links | `build/check-links.js` | Dead link, or a root-absolute link missing the base prefix |
 | Structural accessibility | `build/check-a11y.js` | Any HIGH finding |
 
+Also live in CI, in a separate `lighthouse` job:
+
+| Check | Tool | Fails build on |
+|---|---|---|
+| Colour contrast | `build/contrast.js` | Any palette pair below 4.5:1 |
+| Lighthouse a11y / SEO / best-practices | `lhci` on 6 pages | Score below 0.95 |
+| Lighthouse performance | `lhci` | Warns below 0.90 (see §7 for why it warns) |
+
+That job does **not** gate the deploy — a shared-runner perf wobble should not block a content fix.
+The `build` job gates the deploy; `lighthouse` reports.
+
 **Not yet wired — do not claim these as passing until they are:**
 
 | Check | Tool | Why it matters |
 |---|---|---|
 | HTML validity | `html-validate` on `dist/**` | Catches malformed markup the regex checkers miss |
-| Lighthouse ≥ 90 ×4 | `lhci` on key pages | Perf/SEO targets in §7 are currently aspirations, not measurements |
-| Full accessibility | `axe-core` or Lighthouse a11y | See the gap below |
 | Calculator unit tests | Charge math per segment, per side | Currently verified manually only |
 | API contract tests | Once Zone 2 exists | — |
 
@@ -151,10 +160,10 @@ missing `lang` or `title`.
 It does **not** catch colour contrast, focus order, keyboard traps, screen-reader output,
 ARIA correctness beyond attribute presence, or anything rendered by JavaScript after load.
 
-> A pass here means "no obvious structural defects", not "accessible". The WCAG AA claim in
-> `docs/01-design-system.md` §7 rests on design decisions and manual keyboard testing, and
-> has not been confirmed by an automated contrast or screen-reader audit. Treat it as
-> intended-and-designed-for, not verified, until `lhci`/`axe` are wired up.
+> A pass here means "no obvious structural defects", not "accessible". Contrast is now covered
+> separately by `build/contrast.js` and by Lighthouse in CI, both of which this scan cannot do.
+> Focus order, keyboard traps and screen-reader output remain **unverified** — those need manual
+> testing, and no automated tool substitutes for it.
 
 ### Calculator test cases (must pass)
 
@@ -234,18 +243,43 @@ drills** — an untested backup is a hypothesis.
 
 ## 7. Performance targets
 
-| Metric | Target | Status |
-|---|---|---|
-| Total page weight | < 250 KB | **Measured — met** (see below) |
-| Lighthouse Performance | ≥ 90 | Not measured |
-| Accessibility | ≥ 90 | Not measured (structural scan only) |
-| SEO | ≥ 90 | Not measured |
-| Best Practices | ≥ 90 | Not measured |
-| LCP | < 2.0s on 4G | Not measured |
-| CLS | < 0.05 | Not measured |
+All measured with Lighthouse 12, mobile emulation with throttling, against the root-mode build.
 
-> Only the first row has been verified. The rest are targets the build is *designed* to hit,
-> not results anyone has recorded. Wire `lhci` into CI before quoting them to anyone.
+| Metric | Target | Measured |
+|---|---|---|
+| Lighthouse Performance | ≥ 90 | **98–100** |
+| Accessibility | ≥ 90 | **100** |
+| SEO | ≥ 90 | **100** |
+| Best Practices | ≥ 90 | **100** |
+| LCP | < 2.0s | **1.4–1.8s** |
+| CLS | < 0.05 | **0** |
+| Total page weight | < 250 KB | **92–115 KB** (~24 KB gzipped) |
+
+Per page:
+
+| | perf | a11y | best | SEO |
+|---|---|---|---|---|
+| `/` | 100 | 100 | 100 | 100 |
+| `/verify/` | 100 | 100 | 100 | 100 |
+| `/pricing/` | 100 | 100 | 100 | 100 |
+| `/platform/` | 98 | 100 | 100 | 100 |
+| `/open-account/` | 100 | 100 | 100 | 100 |
+| `/faq/` | 100 | 100 | 100 | 100 |
+| `/support/` `/compare/` `/terms/` | 100 | 100 | 100 | 100 |
+
+**Enforced by CI** via `.lighthouserc.json`, on six representative pages:
+
+- accessibility, SEO, best-practices: **error** below 0.95
+- performance: **warn** below 0.90 — CI runners are shared and perf scores move a few points
+  between runs. A hard perf gate produces flaky failures that get ignored, which is worse than a
+  warning that gets read.
+- Individual audits asserted as errors regardless of category score: `color-contrast`,
+  `definition-list`, `label-content-name-mismatch`, `heading-order`, `html-has-lang`, `link-name`,
+  `button-name`, `label`, `image-alt`, `duplicate-id-aria`.
+- Dev-server artefacts switched off: text compression, cache TTL, minification, unused CSS,
+  render-blocking. These reflect the local static server, not the CDN, and would be noise.
+
+Reports upload as a build artefact (14-day retention).
 
 **Measured page weight** (uncompressed / gzipped as a CDN actually serves it):
 
