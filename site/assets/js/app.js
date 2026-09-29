@@ -65,6 +65,26 @@
     }
   }
 
+  /* ------------------------------------------------------------ UTM & Referral capture */
+  function getQueryParam(p) {
+    try {
+      var params = new URLSearchParams(window.location.search);
+      return params.get(p) || '';
+    } catch(e) { return ''; }
+  }
+  (function captureUtms() {
+    try {
+      ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'r', 'c'].forEach(function(k) {
+        var v = getQueryParam(k);
+        if (v) sessionStorage.setItem('tg_' + k, v);
+      });
+      var ref = getQueryParam('r');
+      if (ref) localStorage.setItem('tg_ref', ref);
+      var creator = getQueryParam('c');
+      if (creator) localStorage.setItem('tg_creator', creator);
+    } catch(e) {}
+  })();
+
   var queue = [];
 
   function track(name, props) {
@@ -381,6 +401,35 @@
       if (dispMobile) dispMobile.textContent = '+91 ' + phone;
       if (kycOtpArea) kycOtpArea.hidden = false;
       document.getElementById('btn-send-otp').style.display = 'none';
+
+      // War Room Live Lead Ingress
+      try {
+        var leadPayload = {
+          phone: phone,
+          source: 'TRUST_WEBSITE_ONBOARDING',
+          utmSource: sessionStorage.getItem('tg_utm_source') || '',
+          utmMedium: sessionStorage.getItem('tg_utm_medium') || '',
+          utmCampaign: sessionStorage.getItem('tg_utm_campaign') || '',
+          utmTerm: sessionStorage.getItem('tg_utm_term') || '',
+          utmContent: sessionStorage.getItem('tg_utm_content') || '',
+          referralCode: sessionStorage.getItem('tg_r') || localStorage.getItem('tg_ref') || '',
+          creatorCode: sessionStorage.getItem('tg_c') || localStorage.getItem('tg_creator') || '',
+          landingPage: window.location.href,
+          referrerUrl: document.referrer || '',
+          consentWhatsApp: true
+        };
+        fetch('/api/v1/public/leads', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(leadPayload)
+        }).then(function (res) { return res.json(); })
+          .then(function (resData) {
+            if (resData && resData.data && resData.data.leadCode) {
+              applicantState.leadCode = resData.data.leadCode;
+              try { localStorage.setItem('tg_lead_code', resData.data.leadCode); } catch (_) {}
+            }
+          }).catch(function () {});
+      } catch (_) {}
     });
   }
 
