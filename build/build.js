@@ -236,6 +236,13 @@ function build() {
     JSON.stringify(cfg.charges)
   );
 
+  // CNAME for GitHub Pages custom domain — only in root-domain mode.
+  const cname = process.env.CNAME || '';
+  if (cname && !BASE) {
+    fs.writeFileSync(path.join(DIST, 'CNAME'), cname.trim() + '\n');
+    console.log(`  CNAME file written: ${cname.trim()}`);
+  }
+
   // sitemap + robots
   const urls = pages
     .filter((p) => p.noindex !== true)
