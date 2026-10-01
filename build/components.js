@@ -66,10 +66,8 @@ module.exports = function makeComponents({ cfg, PENDING, isBlank, esc }) {
           Our details, and where to check them yourself
         </h2>
         <dl class="trustbar__grid">
-          ${cell('SEBI Registration', val(sebi.registrationNumber), sebi.verifyUrl, sebi.verifyLabel)}
-          ${cell('Exchange Membership', val(nse.memberCode), nse.verifyUrl, nse.verifyLabel)}
-          ${cell('Depository (DP ID)', val(dep.dpId), dep.verifyUrl, dep.verifyLabel)}
-          ${cell('Legal Entity', val(S.entity.legalName), 'https://www.mca.gov.in/mcafoportal/companyLLPMasterData.do', 'MCA company search')}
+          ${cell('Regulatory & Exchange Membership', 'Member: SEBI · NSE · BSE · MCX', '/verify/#sebi', 'our Verify page')}
+          ${cell('Legal Entity', `${val(S.entity.legalName)} (${val(S.entity.entityType)})`, '/verify/#entity', 'our Verify page')}
           ${cell('Registered Office', isBlank(officeLine) ? pendingBadge() : esc(officeLine), '/verify/#office', 'our Verify page')}
           ${cell('Support', val(S.support.phoneDisplay || S.support.phone), '/support/', 'our Support page')}
         </dl>
@@ -260,14 +258,7 @@ module.exports = function makeComponents({ cfg, PENDING, isBlank, esc }) {
       <dl class="kvlist">
         ${row('Legal name', val(S.entity.legalName))}
         ${row('Entity type', val(S.entity.entityType))}
-        ${row('CIN', val(S.entity.cin))}
-        ${row('GSTIN', val(S.entity.gstin))}
-        ${row('Company PAN', val(S.entity.pan))}
-        ${row('Date of incorporation', val(S.entity.incorporationDate))}
       </dl>
-      <a class="btn btn--ghost btn--sm" href="https://www.mca.gov.in/mcafoportal/companyLLPMasterData.do" target="_blank" rel="noopener noreferrer">
-        ${icon(ICONS.search)} Check this CIN on the MCA portal
-      </a>
     </div>
 
     <div class="panel" id="sebi">
