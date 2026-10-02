@@ -310,44 +310,6 @@ module.exports = function makeComponents({ cfg, PENDING, isBlank, esc }) {
             <a class="card__link" href="#depositories" style="font-weight:600; color:var(--primary); font-size:0.875rem;">Client Safeguards &rarr;</a>
           </div>
         </article>
-
-        <!-- Card 6: Verify Intermediary -->
-        <article class="card" style="background: var(--surface-2); border: 1px solid var(--line); display:flex; flex-direction:column; justify-content:space-between;">
-          <div>
-            <div class="card__top" style="margin-bottom:12px;">
-              <span style="font-size:1.5rem;">🔎</span>
-              <span class="pill pill--ok">&#10003; Public Search</span>
-            </div>
-            <h3 class="card__title" style="font-size:1.1rem; margin-bottom:8px;">Verify Intermediary</h3>
-            <p class="card__body" style="font-size:0.88rem; color:var(--muted); line-height:1.5;">
-              Look up registered market intermediaries and stock broker certifications directly on the regulator's portal.
-            </p>
-          </div>
-          <div style="margin-top:16px;">
-            <a class="btn btn--ghost btn--sm" href="https://www.sebi.gov.in/intermediaries.html" target="_blank" rel="noopener noreferrer" style="width:100%; justify-content:center;">
-              ${icon(ICONS.search)} Verify on SEBI
-            </a>
-          </div>
-        </article>
-
-        <!-- Card 7: Verify Exchange Membership -->
-        <article class="card" style="background: var(--surface-2); border: 1px solid var(--line); display:flex; flex-direction:column; justify-content:space-between;">
-          <div>
-            <div class="card__top" style="margin-bottom:12px;">
-              <span style="font-size:1.5rem;">🏛</span>
-              <span class="pill pill--ok">&#10003; Exchange Registry</span>
-            </div>
-            <h3 class="card__title" style="font-size:1.1rem; margin-bottom:8px;">Verify Exchange Membership</h3>
-            <p class="card__body" style="font-size:0.88rem; color:var(--muted); line-height:1.5;">
-              Verify executing broker membership, valid trading segments, and active market status directly on NSE.
-            </p>
-          </div>
-          <div style="margin-top:16px;">
-            <a class="btn btn--ghost btn--sm" href="https://www.nseindia.com/invest/find-a-stock-broker" target="_blank" rel="noopener noreferrer" style="width:100%; justify-content:center;">
-              ${icon(ICONS.search)} Verify on NSE
-            </a>
-          </div>
-        </article>
       </div>
     </div>
 
@@ -380,9 +342,6 @@ module.exports = function makeComponents({ cfg, PENDING, isBlank, esc }) {
         ${row('Securities Execution', 'Facilitated through relevant registered market intermediary')}
         ${row('Regulatory Adherence', 'Compliant with applicable SEBI circulars, DPDP tokenization, and risk disclosures')}
       </dl>
-      <a class="btn btn--ghost btn--sm" href="https://www.sebi.gov.in/intermediaries.html" target="_blank" rel="noopener noreferrer">
-        ${icon(ICONS.search)} Verify on SEBI
-      </a>
     </div>
 
     <div class="panel" id="exchanges">
@@ -396,10 +355,7 @@ module.exports = function makeComponents({ cfg, PENDING, isBlank, esc }) {
             <h3 class="h5" style="margin:0;">NSE</h3>
             <span class="pill pill--ok" style="font-size:0.7rem;">Active</span>
           </div>
-          <p style="font-weight:600; color:var(--text); font-size:0.9rem; margin-bottom:12px;">Access through registered intermediary</p>
-          <a class="btn btn--ghost btn--sm" href="https://www.nseindia.com/invest/find-a-stock-broker" target="_blank" rel="noopener noreferrer" style="width:100%; justify-content:center;">
-            ${icon(ICONS.search)} Verify on NSE
-          </a>
+          <p style="color:var(--muted); font-size:0.9rem; margin:0;">Access through registered intermediary</p>
         </div>
 
         <div style="background:var(--surface-2); padding:16px; border-radius:8px; border:1px solid var(--line);">
@@ -407,10 +363,7 @@ module.exports = function makeComponents({ cfg, PENDING, isBlank, esc }) {
             <h3 class="h5" style="margin:0;">BSE</h3>
             <span class="pill pill--ok" style="font-size:0.7rem;">Active</span>
           </div>
-          <p style="font-weight:600; color:var(--text); font-size:0.9rem; margin-bottom:12px;">Access through registered intermediary</p>
-          <a class="btn btn--ghost btn--sm" href="https://www.bseindia.com/members/MembersDirectory.html" target="_blank" rel="noopener noreferrer" style="width:100%; justify-content:center;">
-            ${icon(ICONS.search)} Verify on BSE
-          </a>
+          <p style="color:var(--muted); font-size:0.9rem; margin:0;">Access through registered intermediary</p>
         </div>
       </div>
       <dl class="kvlist">
@@ -432,14 +385,6 @@ module.exports = function makeComponents({ cfg, PENDING, isBlank, esc }) {
         ${row('Settlement Framework', 'Direct settlement through clearing corporations (NSE Clearing Ltd / ICCL)')}
         ${row('Depository Custody', 'Securities held in beneficiary owner (BO) accounts with CDSL and NSDL')}
       </dl>
-      <div style="display:flex; gap:10px; margin-top:12px; flex-wrap:wrap;">
-        <a class="btn btn--ghost btn--sm" href="https://www.cdslindia.com/DP/dplist.aspx" target="_blank" rel="noopener noreferrer">
-          ${icon(ICONS.search)} CDSL DP Directory
-        </a>
-        <a class="btn btn--ghost btn--sm" href="https://nsdl.co.in/dpsch.php" target="_blank" rel="noopener noreferrer">
-          ${icon(ICONS.search)} NSDL DP Directory
-        </a>
-      </div>
     </div>
 
     <div class="panel" id="office">
@@ -451,7 +396,7 @@ module.exports = function makeComponents({ cfg, PENDING, isBlank, esc }) {
         ${row('Operational Scope', '<strong>PAN India</strong> &mdash; Serving clients across all 28 States and 8 Union Territories')}
         ${row('Operations Model', 'Centralized Digital Technology &amp; Compliance Operations Desk')}
         ${row('Official Desk Email', 'info@tradegrowx.in')}
-        ${row('Official Support Phone', '+91 95896 15649')}
+        ${row('Official Support', '<a href="https://wa.me/919589615649" target="_blank" rel="noopener noreferrer" style="color:var(--primary); font-weight:600;">Chat on WhatsApp &rarr;</a>')}
       </dl>
       <p class="muted small" style="margin-top:12px;">
         Trade Grow provides 100% digital onboarding, instant Aadhaar DigiLocker verification, and cloud-delivered trading platform access across India.
@@ -464,9 +409,9 @@ module.exports = function makeComponents({ cfg, PENDING, isBlank, esc }) {
         <span class="pill pill--ok">&#10003; Active Desk</span>
       </div>
       <dl class="kvlist">
-        ${row('Compliance Officer', 'Compliance Cell &middot; info@tradegrowx.in &middot; +91 95896 15649')}
-        ${row('Grievance Redressal Officer', 'Grievance Desk &middot; info@tradegrowx.in &middot; +91 95896 15649')}
-        ${row('Principal Officer', 'Management Desk &middot; info@tradegrowx.in &middot; +91 95896 15649')}
+        ${row('Compliance Officer', 'Compliance Cell &middot; info@tradegrowx.in &middot; <a href="https://wa.me/919589615649" target="_blank" rel="noopener noreferrer" style="color:var(--primary);">WhatsApp</a>')}
+        ${row('Grievance Redressal Officer', 'Grievance Desk &middot; info@tradegrowx.in &middot; <a href="https://wa.me/919589615649" target="_blank" rel="noopener noreferrer" style="color:var(--primary);">WhatsApp</a>')}
+        ${row('Principal Officer', 'Management Desk &middot; info@tradegrowx.in &middot; <a href="https://wa.me/919589615649" target="_blank" rel="noopener noreferrer" style="color:var(--primary);">WhatsApp</a>')}
       </dl>
       <p class="muted small" style="margin-top:12px;">
         Dedicated internal compliance and grievance redressal channels for all client queries, with maximum 24-48 hour resolution SLAs.
