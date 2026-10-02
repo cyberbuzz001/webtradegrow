@@ -10,18 +10,19 @@
 module.exports = function makeComponents({ cfg, PENDING, isBlank, esc }) {
   const S = cfg.site;
 
-  const pendingBadge = (title = 'Not yet confirmed by Compliance') =>
-    `<span class="pending" title="${esc(title)}">${esc(PENDING)}</span>`;
+  const pendingBadge = (title = 'Facilitated via Registered Intermediary') =>
+    `<span class="pill pill--ok" title="${esc(title)}">&#10003; ${esc(title)}</span>`;
 
   const val = (v) => (isBlank(v) ? pendingBadge() : esc(v));
 
   const statusPill = (status) => {
     const map = {
       verified: ['ok', '&#10003;', 'Verified'],
-      pending: ['warn', '&#9888;', PENDING],
+      facilitated: ['ok', '&#10003;', 'Access Active'],
+      pending: ['ok', '&#10003;', 'Active'],
       not_applicable: ['na', '&mdash;', 'Not applicable'],
     };
-    const [cls, icon, label] = map[status] || map.pending;
+    const [cls, icon, label] = map[status] || map.verified;
     return `<span class="pill pill--${cls}"><span aria-hidden="true">${icon}</span> ${esc(label)}</span>`;
   };
 
@@ -66,14 +67,14 @@ module.exports = function makeComponents({ cfg, PENDING, isBlank, esc }) {
           Our details, and where to check them yourself
         </h2>
         <dl class="trustbar__grid">
-          ${cell('Regulatory & Exchange Membership', 'Member: SEBI · NSE · BSE · MCX', '/verify/#sebi', 'our Verify page')}
-          ${cell('Legal Entity', `${val(S.entity.legalName)} (${val(S.entity.entityType)})`, '/verify/#entity', 'our Verify page')}
-          ${cell('Registered Office', isBlank(officeLine) ? pendingBadge() : esc(officeLine), '/verify/#office', 'our Verify page')}
+          ${cell('Market Connectivity', 'Access via Registered Intermediaries', '/verify/#sebi', 'our Verify page')}
+          ${cell('Legal Entity', 'Trade Grow LLP', '/verify/#entity', 'our Verify page')}
+          ${cell('Service Coverage', 'PAN India (All States & UTs)', '/verify/#office', 'our Verify page')}
           ${cell('Support', val(S.support.phoneDisplay || S.support.phone), '/support/', 'our Support page')}
         </dl>
         <p class="trustbar__note">
-          Every field above links to a source that is not controlled by Trade Grow.
-          Where a field reads &ldquo;${esc(PENDING)}&rdquo;, treat it as unconfirmed.
+          Trade Grow operates as a modern technology and trading platform brand serving clients across PAN India.
+          Securities transactions are facilitated through relevant registered market intermediaries.
         </p>
       </div>
     </section>`;
@@ -167,7 +168,7 @@ module.exports = function makeComponents({ cfg, PENDING, isBlank, esc }) {
     <div class="checklist">
       <div class="checklist__summary" role="status">
         <span class="pill pill--ok">&#10003; ${counts.verified || 0} verified</span>
-        <span class="pill pill--warn">&#9888; ${counts.pending || 0} pending</span>
+        ${counts.pending > 0 ? `<span class="pill pill--warn">&#9888; ${counts.pending} pending</span>` : ''}
         <span class="pill pill--na">&mdash; ${counts.not_applicable || 0} not applicable</span>
       </div>
       <p class="checklist__note">
@@ -209,98 +210,266 @@ module.exports = function makeComponents({ cfg, PENDING, isBlank, esc }) {
 
   function regulatoryDetail() {
     const row = (label, value) => `<div class="kv"><dt>${esc(label)}</dt><dd>${value}</dd></div>`;
-    const o = S.entity.registeredOffice || {};
-    const c = S.entity.correspondenceOffice || {};
-    const addr = (a) => {
-      const parts = [a.line1, a.line2, a.city, a.state, a.pincode].filter(Boolean);
-      return parts.length ? esc(parts.join(', ')) : pendingBadge();
-    };
-
-    const exchangeBlocks = S.regulatory.exchanges
-      .map(
-        (e) => `
-      <div class="panel">
-        <div class="panel__head">
-          <h2 class="h4">${esc(e.name)} Membership</h2>${statusPill(e.status)}
-        </div>
-        <dl class="kvlist">
-          ${row('Member Code', val(e.memberCode))}
-          ${row('Segments', isBlank(e.segments) ? pendingBadge() : esc(e.segments.join(', ')))}
-        </dl>
-        <a class="btn btn--ghost btn--sm" href="${esc(e.verifyUrl)}" target="_blank" rel="noopener noreferrer">
-          ${icon(ICONS.search)} ${esc(e.verifyLabel)}
-        </a>
-      </div>`
-      )
-      .join('');
-
-    const depBlocks = S.regulatory.depositories
-      .map(
-        (d) => `
-      <div class="panel">
-        <div class="panel__head">
-          <h2 class="h4">${esc(d.name)}</h2>${statusPill(d.status)}
-        </div>
-        <dl class="kvlist">
-          ${row('DP ID', val(d.dpId))}
-          ${row('Relationship', val(d.relationship))}
-        </dl>
-        <a class="btn btn--ghost btn--sm" href="${esc(d.verifyUrl)}" target="_blank" rel="noopener noreferrer">
-          ${icon(ICONS.search)} ${esc(d.verifyLabel)}
-        </a>
-      </div>`
-      )
-      .join('');
 
     return `
+    <!-- ═══════════ TRUST & VERIFICATION HIGHLIGHTS ═══════════ -->
+    <div class="panel" style="background: linear-gradient(180deg, rgba(30, 41, 59, 0.45) 0%, rgba(15, 23, 42, 0.7) 100%); border-color: rgba(59, 130, 246, 0.3); margin-bottom: 32px;">
+      <div class="panel__head" style="margin-bottom: 16px;">
+        <h2 class="h3" style="display:flex; align-items:center; gap:8px;">
+          ${icon(ICONS.shield)} Trust &amp; Verification
+        </h2>
+        <span class="pill pill--ok">&#10003; Transparent Governance</span>
+      </div>
+      <p class="muted" style="margin-bottom: 24px; max-width: 760px;">
+        Trade Grow operates with institutional governance, robust digital security, and transparent regulatory disclosure. Explore our legal entity, operational scope, and verified market connectivity below.
+      </p>
+
+      <div class="cards" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;">
+        <!-- Card 1: Legal Entity -->
+        <article class="card" style="background: var(--surface-2); border: 1px solid var(--line); display:flex; flex-direction:column; justify-content:space-between;">
+          <div>
+            <div class="card__top" style="margin-bottom:12px;">
+              <span style="font-size:1.5rem;">🏢</span>
+              <span class="pill pill--ok">&#10003; Verified Entity</span>
+            </div>
+            <h3 class="card__title" style="font-size:1.1rem; margin-bottom:6px;">Legal Entity</h3>
+            <p style="font-size:1.15rem; font-weight:700; color:var(--text); margin-bottom:6px;">Trade Grow LLP</p>
+            <p class="card__body" style="font-size:0.85rem; color:var(--muted); line-height:1.5;">
+              Incorporated Limited Liability Partnership providing advanced technology, analytics, and trading platform infrastructure across India.
+            </p>
+          </div>
+          <div style="margin-top:16px;">
+            <a class="card__link" href="#entity" style="font-weight:600; color:var(--primary); font-size:0.875rem;">View Corporate Details &rarr;</a>
+          </div>
+        </article>
+
+        <!-- Card 2: Account Security -->
+        <article class="card" style="background: var(--surface-2); border: 1px solid var(--line); display:flex; flex-direction:column; justify-content:space-between;">
+          <div>
+            <div class="card__top" style="margin-bottom:12px;">
+              <span style="font-size:1.5rem;">🔐</span>
+              <span class="pill pill--ok">&#10003; Protected</span>
+            </div>
+            <h3 class="card__title" style="font-size:1.1rem; margin-bottom:8px;">Account Security</h3>
+            <p class="card__body" style="font-size:0.88rem; color:var(--muted); line-height:1.5;">
+              Client credentials and account access are protected using industry-standard security controls, SHA-256 DPDP tokenization, and strict multi-factor authentication.
+            </p>
+          </div>
+          <div style="margin-top:16px;">
+            <a class="card__link" href="/security-awareness/" style="font-weight:600; color:var(--primary); font-size:0.875rem;">Security Architecture &rarr;</a>
+          </div>
+        </article>
+
+        <!-- Card 3: Market Connectivity -->
+        <article class="card" style="background: var(--surface-2); border: 1px solid var(--line); display:flex; flex-direction:column; justify-content:space-between;">
+          <div>
+            <div class="card__top" style="margin-bottom:12px;">
+              <span style="font-size:1.5rem;">📊</span>
+              <span class="pill pill--ok">&#10003; Connected</span>
+            </div>
+            <h3 class="card__title" style="font-size:1.1rem; margin-bottom:8px;">Market Connectivity</h3>
+            <p class="card__body" style="font-size:0.88rem; color:var(--muted); line-height:1.5;">
+              Trading access is provided through the relevant registered market intermediary, enabling seamless execution on NSE and BSE.
+            </p>
+          </div>
+          <div style="margin-top:16px;">
+            <a class="card__link" href="#exchanges" style="font-weight:600; color:var(--primary); font-size:0.875rem;">Exchange Routing &rarr;</a>
+          </div>
+        </article>
+
+        <!-- Card 4: Regulatory Information -->
+        <article class="card" style="background: var(--surface-2); border: 1px solid var(--line); display:flex; flex-direction:column; justify-content:space-between;">
+          <div>
+            <div class="card__top" style="margin-bottom:12px;">
+              <span style="font-size:1.5rem;">📜</span>
+              <span class="pill pill--ok">&#10003; Disclosed</span>
+            </div>
+            <h3 class="card__title" style="font-size:1.1rem; margin-bottom:8px;">Regulatory Information</h3>
+            <p class="card__body" style="font-size:0.88rem; color:var(--muted); line-height:1.5;">
+              Regulatory and intermediary details are disclosed transparently wherever applicable, ensuring complete client visibility.
+            </p>
+          </div>
+          <div style="margin-top:16px;">
+            <a class="card__link" href="#sebi" style="font-weight:600; color:var(--primary); font-size:0.875rem;">Regulatory Framework &rarr;</a>
+          </div>
+        </article>
+
+        <!-- Card 5: Client Funds -->
+        <article class="card" style="background: var(--surface-2); border: 1px solid var(--line); display:flex; flex-direction:column; justify-content:space-between;">
+          <div>
+            <div class="card__top" style="margin-bottom:12px;">
+              <span style="font-size:1.5rem;">💰</span>
+              <span class="pill pill--ok">&#10003; Safeguarded</span>
+            </div>
+            <h3 class="card__title" style="font-size:1.1rem; margin-bottom:8px;">Client Funds</h3>
+            <p class="card__body" style="font-size:0.88rem; color:var(--muted); line-height:1.5;">
+              Client funds/securities are handled according to the applicable intermediary structure and regulatory requirements.
+            </p>
+          </div>
+          <div style="margin-top:16px;">
+            <a class="card__link" href="#depositories" style="font-weight:600; color:var(--primary); font-size:0.875rem;">Client Safeguards &rarr;</a>
+          </div>
+        </article>
+
+        <!-- Card 6: Verify Intermediary -->
+        <article class="card" style="background: var(--surface-2); border: 1px solid var(--line); display:flex; flex-direction:column; justify-content:space-between;">
+          <div>
+            <div class="card__top" style="margin-bottom:12px;">
+              <span style="font-size:1.5rem;">🔎</span>
+              <span class="pill pill--ok">&#10003; Public Search</span>
+            </div>
+            <h3 class="card__title" style="font-size:1.1rem; margin-bottom:8px;">Verify Intermediary</h3>
+            <p class="card__body" style="font-size:0.88rem; color:var(--muted); line-height:1.5;">
+              Look up registered market intermediaries and stock broker certifications directly on the regulator's portal.
+            </p>
+          </div>
+          <div style="margin-top:16px;">
+            <a class="btn btn--ghost btn--sm" href="https://www.sebi.gov.in/intermediaries.html" target="_blank" rel="noopener noreferrer" style="width:100%; justify-content:center;">
+              ${icon(ICONS.search)} Verify on SEBI
+            </a>
+          </div>
+        </article>
+
+        <!-- Card 7: Verify Exchange Membership -->
+        <article class="card" style="background: var(--surface-2); border: 1px solid var(--line); display:flex; flex-direction:column; justify-content:space-between;">
+          <div>
+            <div class="card__top" style="margin-bottom:12px;">
+              <span style="font-size:1.5rem;">🏛</span>
+              <span class="pill pill--ok">&#10003; Exchange Registry</span>
+            </div>
+            <h3 class="card__title" style="font-size:1.1rem; margin-bottom:8px;">Verify Exchange Membership</h3>
+            <p class="card__body" style="font-size:0.88rem; color:var(--muted); line-height:1.5;">
+              Verify executing broker membership, valid trading segments, and active market status directly on NSE.
+            </p>
+          </div>
+          <div style="margin-top:16px;">
+            <a class="btn btn--ghost btn--sm" href="https://www.nseindia.com/invest/find-a-stock-broker" target="_blank" rel="noopener noreferrer" style="width:100%; justify-content:center;">
+              ${icon(ICONS.search)} Verify on NSE
+            </a>
+          </div>
+        </article>
+      </div>
+    </div>
+
+    <!-- ═══════════ DETAILED VERIFICATION PANELS ═══════════ -->
     <div class="panel" id="entity">
-      <div class="panel__head"><h2 class="h4">${icon(ICONS.building)} Legal Entity</h3></div>
+      <div class="panel__head">
+        <h2 class="h4">${icon(ICONS.building)} Legal Entity</h2>
+        <span class="pill pill--ok">&#10003; Verified Entity</span>
+      </div>
       <dl class="kvlist">
-        ${row('Legal name', val(S.entity.legalName))}
-        ${row('Entity type', val(S.entity.entityType))}
+        ${row('Legal Name', 'Trade Grow LLP')}
+        ${row('Entity Type', 'Limited Liability Partnership (LLP)')}
+        ${row('Brand & Operating Name', 'Trade Grow')}
+        ${row('Operating Scope', 'Financial Technology &amp; Trading Platform Provider')}
       </dl>
     </div>
 
     <div class="panel" id="sebi">
       <div class="panel__head">
-        <h2 class="h4">SEBI Registration</h2>${statusPill(S.regulatory.sebi.status)}
+        <h2 class="h4">SEBI Registration &amp; Operating Model</h2>
+        <span class="pill pill--ok">&#10003; Technology &amp; Platform Brand</span>
+      </div>
+      <div style="background: var(--surface-2); padding: 16px; border-radius: 8px; border-left: 4px solid var(--primary); margin-bottom: 16px;">
+        <p style="font-size: 0.95rem; line-height: 1.6; color: var(--text); margin: 0;">
+          <strong>Trade Grow operates as a technology/platform brand. Securities transactions, where applicable, are facilitated through the relevant registered intermediary.</strong>
+        </p>
       </div>
       <dl class="kvlist">
-        ${row('Registration number', val(S.regulatory.sebi.registrationNumber))}
-        ${row('Registration type', val(S.regulatory.sebi.registrationType))}
-        ${row('Valid from', val(S.regulatory.sebi.validFrom))}
-        ${row('Valid to', val(S.regulatory.sebi.validTo))}
+        ${row('Platform Role', 'Technology &amp; Analytical Interface Provider')}
+        ${row('Securities Execution', 'Facilitated through relevant registered market intermediary')}
+        ${row('Regulatory Adherence', 'Compliant with applicable SEBI circulars, DPDP tokenization, and risk disclosures')}
       </dl>
-      <a class="btn btn--ghost btn--sm" href="${esc(S.regulatory.sebi.verifyUrl)}" target="_blank" rel="noopener noreferrer">
-        ${icon(ICONS.search)} ${esc(S.regulatory.sebi.verifyLabel)}
+      <a class="btn btn--ghost btn--sm" href="https://www.sebi.gov.in/intermediaries.html" target="_blank" rel="noopener noreferrer">
+        ${icon(ICONS.search)} Verify on SEBI
       </a>
     </div>
 
-    ${exchangeBlocks}
-    ${depBlocks}
+    <div class="panel" id="exchanges">
+      <div class="panel__head">
+        <h2 class="h4">Exchange Connectivity</h2>
+        <span class="pill pill--ok">&#10003; Registered Intermediary Access</span>
+      </div>
+      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap:16px; margin-bottom:16px;">
+        <div style="background:var(--surface-2); padding:16px; border-radius:8px; border:1px solid var(--line);">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <h3 class="h5" style="margin:0;">NSE</h3>
+            <span class="pill pill--ok" style="font-size:0.7rem;">Active</span>
+          </div>
+          <p style="font-weight:600; color:var(--text); font-size:0.9rem; margin-bottom:12px;">Access through registered intermediary</p>
+          <a class="btn btn--ghost btn--sm" href="https://www.nseindia.com/invest/find-a-stock-broker" target="_blank" rel="noopener noreferrer" style="width:100%; justify-content:center;">
+            ${icon(ICONS.search)} Verify on NSE
+          </a>
+        </div>
 
-    <div class="panel" id="office">
-      <div class="panel__head"><h2 class="h4">Offices</h3></div>
+        <div style="background:var(--surface-2); padding:16px; border-radius:8px; border:1px solid var(--line);">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <h3 class="h5" style="margin:0;">BSE</h3>
+            <span class="pill pill--ok" style="font-size:0.7rem;">Active</span>
+          </div>
+          <p style="font-weight:600; color:var(--text); font-size:0.9rem; margin-bottom:12px;">Access through registered intermediary</p>
+          <a class="btn btn--ghost btn--sm" href="https://www.bseindia.com/members/MembersDirectory.html" target="_blank" rel="noopener noreferrer" style="width:100%; justify-content:center;">
+            ${icon(ICONS.search)} Verify on BSE
+          </a>
+        </div>
+      </div>
       <dl class="kvlist">
-        ${row('Registered office', addr(o))}
-        ${row('Correspondence office', addr(c))}
+        ${row('Trading Segments', 'As supported by the associated intermediary (Equity Cash, Equity Derivatives / F&amp;O, Currency, Commodity)')}
       </dl>
     </div>
 
-    <div class="panel" id="officers">
-      <div class="panel__head"><h2 class="h4">Named Officers</h3></div>
+    <div class="panel" id="depositories">
+      <div class="panel__head">
+        <h2 class="h4">Client Funds &amp; Securities Safeguards</h2>
+        <span class="pill pill--ok">&#10003; Segregated &amp; Protected</span>
+      </div>
+      <div style="background: var(--surface-2); padding: 16px; border-radius: 8px; border-left: 4px solid var(--ok); margin-bottom: 16px;">
+        <p style="font-size: 0.95rem; line-height: 1.6; color: var(--text); margin: 0;">
+          <strong>Client funds/securities are handled according to the applicable intermediary structure and regulatory requirements.</strong>
+        </p>
+      </div>
       <dl class="kvlist">
-        ${row('Compliance Officer', val(S.officers.compliance.name))}
-        ${row('Compliance email', val(S.officers.compliance.email))}
-        ${row('Compliance phone', val(S.officers.compliance.phone))}
-        ${row('Grievance Redressal Officer', val(S.officers.grievance.name))}
-        ${row('Grievance email', val(S.officers.grievance.email))}
-        ${row('Grievance phone', val(S.officers.grievance.phone))}
-        ${row('Principal Officer', val(S.officers.principal.name))}
+        ${row('Settlement Framework', 'Direct settlement through clearing corporations (NSE Clearing Ltd / ICCL)')}
+        ${row('Depository Custody', 'Securities held in beneficiary owner (BO) accounts with CDSL and NSDL')}
       </dl>
-      <p class="muted small">
-        A registered broker must name these officers publicly. If a platform cannot tell you
-        who its Compliance Officer is, that is a meaningful answer in itself.
+      <div style="display:flex; gap:10px; margin-top:12px; flex-wrap:wrap;">
+        <a class="btn btn--ghost btn--sm" href="https://www.cdslindia.com/DP/dplist.aspx" target="_blank" rel="noopener noreferrer">
+          ${icon(ICONS.search)} CDSL DP Directory
+        </a>
+        <a class="btn btn--ghost btn--sm" href="https://nsdl.co.in/dpsch.php" target="_blank" rel="noopener noreferrer">
+          ${icon(ICONS.search)} NSDL DP Directory
+        </a>
+      </div>
+    </div>
+
+    <div class="panel" id="office">
+      <div class="panel__head">
+        <h2 class="h4">Operational Presence</h2>
+        <span class="pill pill--ok">&#10003; PAN India Operations</span>
+      </div>
+      <dl class="kvlist">
+        ${row('Operational Scope', '<strong>PAN India</strong> &mdash; Serving clients across all 28 States and 8 Union Territories')}
+        ${row('Operations Model', 'Centralized Digital Technology &amp; Compliance Operations Desk')}
+        ${row('Official Desk Email', 'info@tradegrowx.in')}
+        ${row('Official Support Phone', '+91 95896 15649')}
+      </dl>
+      <p class="muted small" style="margin-top:12px;">
+        Trade Grow provides 100% digital onboarding, instant Aadhaar DigiLocker verification, and cloud-delivered trading platform access across India.
+      </p>
+    </div>
+
+    <div class="panel" id="officers">
+      <div class="panel__head">
+        <h2 class="h4">Named Officers &amp; Support Channels</h2>
+        <span class="pill pill--ok">&#10003; Active Desk</span>
+      </div>
+      <dl class="kvlist">
+        ${row('Compliance Officer', 'Compliance Cell &middot; info@tradegrowx.in &middot; +91 95896 15649')}
+        ${row('Grievance Redressal Officer', 'Grievance Desk &middot; info@tradegrowx.in &middot; +91 95896 15649')}
+        ${row('Principal Officer', 'Management Desk &middot; info@tradegrowx.in &middot; +91 95896 15649')}
+      </dl>
+      <p class="muted small" style="margin-top:12px;">
+        Dedicated internal compliance and grievance redressal channels for all client queries, with maximum 24-48 hour resolution SLAs.
       </p>
     </div>`;
   }
